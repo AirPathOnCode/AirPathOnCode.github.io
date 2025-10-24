@@ -1,3 +1,4 @@
 theme: jekyll-theme-minimal
 title: AirPath's homepage
 description: still in development :)
+show_downloads: true
