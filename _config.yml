@@ -2,9 +2,10 @@ timezone: Europe/Amsterdam
 title: AirPath's homepage
 tagline: my blog
 description: A blog
-url: "https://airpath144.github.io"
+url: "https://airpathoncode.github.io"
 github:
 	username: AirPathOnCode
 social:
 	name: AirPath144
-	email: AirPath144
+	email: AirPath
+	discord: AirPath144
