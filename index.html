@@ -17,17 +17,22 @@
     --card-blur: 10px;
     --radius: 14px;
     --shadow: 0 8px 30px rgba(2,6,23,0.75);
+    --content-max-width: 1050px; /* keep in sync with .wrap */
   }
   *{box-sizing:border-box}
-  /* ensure no accidental horizontal scroll and dark base everywhere */
+  /* prevent accidental horizontal scroll; base darkness everywhere */
   html,body{height:100%;margin:0;background-color:var(--bg-a);overflow-x:hidden;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e9f2ff;-webkit-font-smoothing:antialiased}
-  /* container that holds animated gradient blobs — sits above the dark base but fixed so it never leaves viewport */
+
+  /* permanent dark base layer (below animated colored layer) */
+  .dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-4;pointer-events:none}
+
+  /* animated colorful layer (above dark base but below content) */
   .background {
-    position:fixed;inset:0;z-index:-2;pointer-events:none;
+    position:fixed;inset:0;z-index:-3;pointer-events:none;
     background:linear-gradient(120deg,var(--accent-start),var(--accent-end));
     background-size:300% 300%;
     animation: bgShift 14s linear infinite;
-    mix-blend-mode:screen; /* lightens on top of dark base */
+    mix-blend-mode:screen;
     filter:contrast(1.05) saturate(1.05);
   }
   @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -40,8 +45,27 @@
   .blob.b{width:520px;height:520px;right:-10%;bottom:-8%;background:rgba(124,58,237,0.88);animation-duration:18s;opacity:0.45}
   @keyframes floaty{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-22px) scale(1.04)}100%{transform:translateY(0) scale(1)}}
 
+  /* ===== Fixed visual frame (shows content bounds even on scroll) =====
+     - centers and matches the same max width as .wrap
+     - pointer-events:none so it never blocks clicks or taps
+  */
+  .viewport-frame{
+    position:fixed;
+    left:50%;
+    top:20px;
+    transform:translateX(-50%);
+    width:calc(min(var(--content-max-width), 100% - 40px));
+    height:calc(100% - 40px);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.01), 0 20px 50px rgba(2,6,23,0.6);
+    z-index: -1; /* below main content but above animated layers so border always visible */
+    pointer-events: none;
+    transition:width .22s ease;
+  }
+
   /* page container */
-  .wrap{max-width:1050px;margin:48px auto;padding:28px;position:relative;z-index:2}
+  .wrap{max-width:var(--content-max-width);margin:48px auto;padding:28px;position:relative;z-index:2}
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;gap:14px;align-items:center}
   .logo{
@@ -65,7 +89,7 @@
 
   /* layout */
   .grid{display:grid;grid-template-columns:1fr 380px;gap:20px;margin-top:22px;align-items:start}
-  @media (max-width:860px){ .grid{grid-template-columns:1fr} .wrap{padding:18px} .logo{width:60px;height:60px} }
+  @media (max-width:860px){ .grid{grid-template-columns:1fr} .wrap{padding:18px} .logo{width:60px;height:60px} .viewport-frame{display:none} }
 
   /* card style (modern glass) */
   .card{
@@ -107,13 +131,16 @@
 </style>
 </head>
 <body>
-  <!-- permanent dark base layer (ensures darkness everywhere) -->
-  <div style="position:fixed;inset:0;background-color:var(--bg-a);z-index:-4" aria-hidden="true"></div>
+  <!-- permanent dark base layer -->
+  <div class="dark-base" aria-hidden="true"></div>
 
-  <!-- animated colorful layer (sits above dark but below content) -->
+  <!-- animated colorful layer -->
   <div class="background" aria-hidden="true"></div>
   <div class="blob a" aria-hidden="true"></div>
   <div class="blob b" aria-hidden="true"></div>
+
+  <!-- fixed visual frame: shows the maximum content bounds (visible even when scrolling) -->
+  <div class="viewport-frame" aria-hidden="true"></div>
 
   <main class="wrap" id="page">
     <header class="reveal">
@@ -185,7 +212,6 @@
 
           <p class="small-note">Quick actions</p>
           <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
-            <!-- keep server invite separate in case you want one; placeholder remains editable -->
             <a id="serverInviteBtn" class="btn" href="#" target="_blank" rel="noreferrer">Join my server</a>
             <a id="discordWidgetLink" class="btn ghost" href="https://discord.com/channels/@me" target="_blank" rel="noreferrer">Open Discord</a>
           </div>
