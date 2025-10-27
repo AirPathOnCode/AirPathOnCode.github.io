@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== preserve the beloved glass design + prevent horizontal overflow ===== */
+  /* ===== preserve glass UI + richer clipped background + responsive widget ===== */
   :root{
     --bg-a: #071022;   /* deep dark base */
     --accent-start: #3b82f6; /* blue */
@@ -38,25 +38,71 @@
   /* solid dark base beneath everything (ensures darkness even when decorative layer clipped) */
   .dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-6;pointer-events:none}
 
-  /* animated colorful layer CLIPPED and centered so it never triggers overflow */
+  /* ===== improved colorful background (richer) =====
+     clipped and centered so nothing causes overflow */
   .background {
-    position:fixed;inset:0;z-index:-5;pointer-events:none;overflow:hidden;
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+    pointer-events: none;
+    overflow: hidden;
   }
-  .background .color {
-    position:absolute;left:50%;top:0;transform:translateX(-50%);
-    width:200vw;height:100vh;
-    background:linear-gradient(120deg,var(--accent-start),var(--accent-end));
-    background-size:300% 300%;
-    animation: bgShift 14s linear infinite;
-    mix-blend-mode:screen;filter:contrast(1.05) saturate(1.05);
-    pointer-events:none;
-  }
-  @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-  /* blobs inside clipped .background; centered to avoid overflow */
-  .background .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.36;mix-blend-mode:screen;pointer-events:none;left:50%;transform:translateX(-50%);}
-  .background .blob.a{width:760px;height:760px;top:-18%;transform:translateX(-32%);background:rgba(59,130,246,0.9)}
-  .background .blob.b{width:620px;height:620px;bottom:-16%;transform:translateX(36%);background:rgba(124,58,237,0.88);opacity:0.45}
+  /* richer, multi-layered color canvas centered and clipped */
+  .background .color {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 220vw;            /* very wide visual canvas but clipped by overflow:hidden */
+    height: 120vh;
+    background:
+      radial-gradient(60% 60% at 10% 30%, rgba(59,130,246,0.30), transparent 20%),
+      radial-gradient(50% 50% at 90% 70%, rgba(124,58,237,0.28), transparent 25%),
+      linear-gradient(120deg, var(--accent-start), var(--accent-end));
+    background-size: 300% 300%;
+    animation: bgShift 16s linear infinite;
+    mix-blend-mode: screen;
+    filter: contrast(1.12) saturate(1.18) hue-rotate(-4deg);
+    pointer-events: none;
+  }
+
+  @keyframes bgShift {
+    0% { background-position: 0% 40%; }
+    50% { background-position: 100% 60%; }
+    100% { background-position: 0% 40%; }
+  }
+
+  /* blobs: stronger, visible, clipped inside .background */
+  .background .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(72px);
+    opacity: 0.52;         /* stronger so color shows through */
+    mix-blend-mode: screen;
+    pointer-events: none;
+    left: 50%;
+    transform: translateX(-50%);
+    will-change: transform;
+    transition: opacity 0.6s ease;
+  }
+  .background .blob.a {
+    width: 820px;
+    height: 820px;
+    top: -20%;
+    transform: translateX(-34%);
+    background: radial-gradient(circle at 30% 30%, rgba(59,130,246,0.95), rgba(59,130,246,0.65) 35%, transparent 60%);
+  }
+  .background .blob.b {
+    width: 680px;
+    height: 680px;
+    bottom: -18%;
+    transform: translateX(36%);
+    background: radial-gradient(circle at 70% 70%, rgba(124,58,237,0.95), rgba(124,58,237,0.66) 35%, transparent 60%);
+    opacity: 0.58;
+  }
+  /* slightly dim when not hovered to keep subtlety */
+  body:not(:hover) .background .blob { opacity: 0.48; }
 
   /* fixed visual frame that marks the content area (visible on large screens) */
   .viewport-frame{
@@ -69,7 +115,7 @@
   }
   @media (max-width:860px){ .viewport-frame{display:none} }
 
-  /* preserve the original modern glass UI exactly */
+  /* ===== keep the exact glass UI you loved ===== */
   .wrap{max-width:var(--content-max-width);margin:48px auto;padding:28px;position:relative;z-index:2}
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;gap:14px;align-items:center}
@@ -118,7 +164,31 @@
   .tag{font-size:12px;padding:6px 9px;border-radius:999px;background:linear-gradient(90deg,var(--accent-start),var(--accent-end));color:white;font-weight:700}
 
   .widget-wrap{display:flex;justify-content:center}
-  .discord-widget{width:100%;max-width:350px;height:520px;border-radius:12px;overflow:hidden;border:0;box-shadow:0 20px 50px rgba(2,6,23,0.6)}
+  /* ===== responsive Discord widget wrapper (keeps it fitting the card) ===== */
+  .discord-widget{
+    width:100%;
+    max-width:350px;
+    height:auto;
+    border-radius:12px;
+    overflow:hidden;
+    border:0;
+    box-shadow:0 20px 50px rgba(2,6,23,0.6);
+    display:block;
+    box-sizing:border-box;
+  }
+
+  /* iframe scales to wrapper and uses viewport-relative height on small devices */
+  .discord-widget iframe {
+    width:100%;
+    height: min(520px, 72vh); /* desktop up to 520px; iPad/mobile adapt to viewport height */
+    display:block;
+    border:0;
+    box-sizing:border-box;
+  }
+  @media (max-width:420px) {
+    .discord-widget iframe { height: min(420px, 58vh); }
+  }
+
   .small-note{font-size:12px;color:var(--muted);margin-top:10px}
 
   .reveal{opacity:0;transform:translateY(12px) scale(.995);animation: revealIn .6s forwards;animation-delay:0.08s}
@@ -131,11 +201,10 @@
 
   /* ensure all content elements never exceed viewport width */
   img, iframe, video, embed, object { max-width:100% !important; height:auto !important; display:block; box-sizing:border-box; }
-  .discord-widget iframe { width:100%; height:100%; display:block; border:0; }
 </style>
 </head>
 <body>
-  <!-- dark base + clipped animated background (keeps visuals, prevents overflow) -->
+  <!-- dark base + clipped animated background -->
   <div class="dark-base" aria-hidden="true"></div>
   <div class="background" aria-hidden="true">
     <div class="color" aria-hidden="true"></div>
@@ -204,7 +273,7 @@
           <p class="muted">Live server widget (dark). If it appears blank, enable Server Widget in your Discord server settings.</p>
 
           <div class="widget-wrap" style="margin-top:12px">
-            <!-- your widget iframe (keeps responsive constraints) -->
+            <!-- your widget iframe wrapped in responsive container -->
             <div class="discord-widget">
               <iframe id="discordWidget"
                 src="https://discord.com/widget?id=1432386695785091227&theme=dark"
