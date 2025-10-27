@@ -3,41 +3,42 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>My Discord Hub</title>
+<title>My Discord Hub — AirPathOnCode</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
   /* ===== Theme (always dark) ===== */
   :root{
-    --bg-a: #0f1724;   /* deep dark base */
+    --bg-a: #071022;   /* deep dark base - covers everything */
     --glass: rgba(255,255,255,0.04);
-    --glass-2: rgba(255,255,255,0.03);
-    --muted: rgba(255,255,255,0.7);
+    --muted: rgba(255,255,255,0.72);
     --accent-start: #3b82f6; /* blue */
     --accent-end: #7c3aed;   /* purple */
     --card-blur: 10px;
     --radius: 14px;
-    --shadow: 0 8px 30px rgba(2,6,23,0.65);
+    --shadow: 0 8px 30px rgba(2,6,23,0.75);
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg-a);font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e9f2ff;-webkit-font-smoothing:antialiased}
-  /* animated gradient background with soft blobs */
+  /* ensure no accidental horizontal scroll and dark base everywhere */
+  html,body{height:100%;margin:0;background-color:var(--bg-a);overflow-x:hidden;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e9f2ff;-webkit-font-smoothing:antialiased}
+  /* container that holds animated gradient blobs — sits above the dark base but fixed so it never leaves viewport */
   .background {
-    position:fixed;inset:0;z-index:-2;overflow:hidden;
+    position:fixed;inset:0;z-index:-2;pointer-events:none;
     background:linear-gradient(120deg,var(--accent-start),var(--accent-end));
     background-size:300% 300%;
     animation: bgShift 14s linear infinite;
+    mix-blend-mode:screen; /* lightens on top of dark base */
     filter:contrast(1.05) saturate(1.05);
   }
   @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
   .blob{
-    position: absolute;border-radius:50%;filter:blur(60px);opacity:0.35;mix-blend-mode:screen;
-    animation: floaty 12s ease-in-out infinite;
+    position: absolute;border-radius:50%;filter:blur(80px);opacity:0.35;mix-blend-mode:screen;
+    animation: floaty 14s ease-in-out infinite;
   }
-  .blob.a{width:520px;height:520px;left:-12%;top:-8%;background:rgba(59,130,246,0.8);animation-duration:18s}
-  .blob.b{width:420px;height:420px;right:-8%;bottom:-6%;background:rgba(124,58,237,0.78);animation-duration:16s;opacity:0.4}
-  @keyframes floaty{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}100%{transform:translateY(0) scale(1)}}
+  .blob.a{width:620px;height:620px;left:-12%;top:-10%;background:rgba(59,130,246,0.9);animation-duration:20s}
+  .blob.b{width:520px;height:520px;right:-10%;bottom:-8%;background:rgba(124,58,237,0.88);animation-duration:18s;opacity:0.45}
+  @keyframes floaty{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-22px) scale(1.04)}100%{transform:translateY(0) scale(1)}}
 
   /* page container */
   .wrap{max-width:1050px;margin:48px auto;padding:28px;position:relative;z-index:2}
@@ -45,7 +46,7 @@
   .brand{display:flex;gap:14px;align-items:center}
   .logo{
     width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));
+    background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
     border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(var(--card-blur));
     font-weight:800;color:white;font-size:20px;box-shadow:0 6px 22px rgba(2,6,23,0.6);
   }
@@ -55,11 +56,11 @@
   .controls{display:flex;gap:10px;align-items:center}
   .btn{
     display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;
-    background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-    color:#eaf3ff;text-decoration:none;font-weight:600;border:1px solid rgba(255,255,255,0.04);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:#eaf3ff;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,0.04);
     box-shadow:0 6px 18px rgba(2,6,23,0.6);transform:translateZ(0);transition:transform .22s ease, box-shadow .22s ease;
   }
-  .btn:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(3,7,23,0.65)}
+  .btn:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(3,7,23,0.75)}
   .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
 
   /* layout */
@@ -68,13 +69,13 @@
 
   /* card style (modern glass) */
   .card{
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+    background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
     border:1px solid rgba(255,255,255,0.04);
     border-radius:var(--radius);padding:18px;backdrop-filter: blur(var(--card-blur));
     box-shadow:var(--shadow);transition:transform .36s cubic-bezier(.2,.9,.3,1), box-shadow .36s ease, border-color .36s ease;
     transform-origin:top center;
   }
-  .card:hover{transform:translateY(-8px);box-shadow:0 26px 70px rgba(2,6,23,0.75);border-color:rgba(255,255,255,0.06)}
+  .card:hover{transform:translateY(-8px);box-shadow:0 26px 70px rgba(2,6,23,0.8);border-color:rgba(255,255,255,0.06)}
 
   .card h3{margin:0 0 8px 0}
   .muted{color:var(--muted);font-size:13px}
@@ -83,8 +84,8 @@
   #progress-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
   .prog-item{
     display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;
-    background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
-    border:1px solid rgba(255,255,255,0.025);
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.006));
+    border:1px solid rgba(255,255,255,0.02);
     transition:transform .2s ease, box-shadow .2s ease;
   }
   .prog-item:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(2,6,23,0.6)}
@@ -106,6 +107,10 @@
 </style>
 </head>
 <body>
+  <!-- permanent dark base layer (ensures darkness everywhere) -->
+  <div style="position:fixed;inset:0;background-color:var(--bg-a);z-index:-4" aria-hidden="true"></div>
+
+  <!-- animated colorful layer (sits above dark but below content) -->
   <div class="background" aria-hidden="true"></div>
   <div class="blob a" aria-hidden="true"></div>
   <div class="blob b" aria-hidden="true"></div>
@@ -121,8 +126,8 @@
       </div>
 
       <div class="controls">
-        <a id="discordProfileBtn" class="btn" href="#" target="_blank" rel="noreferrer">Discord Profile</a>
-        <a id="botInviteBtn" class="btn ghost" href="https://discord.com/oauth2/authorize?client_id=1322982244800790608&scope=bot%20applications.commands&permissions=0" target="_blank" rel="noreferrer">Invite Bot</a>
+        <!-- single CTA linking to your GitHub -->
+        <a id="githubCta" class="btn" href="https://github.com/AirPathOnCode" target="_blank" rel="noreferrer">View on GitHub — AirPathOnCode</a>
       </div>
     </header>
 
@@ -130,7 +135,7 @@
       <div class="reveal delay">
         <div class="card">
           <h3>About this hub</h3>
-          <p class="muted">A compact landing page linking your Discord profile and bot. The right column shows the live Discord server widget you gave me. Edit this file on GitHub to update links and progress.</p>
+          <p class="muted">A compact landing page linking your Discord presence and bot. The right column shows the live Discord server widget. Edit this file on GitHub to update links and progress.</p>
         </div>
 
         <div class="card" style="margin-top:16px">
@@ -180,6 +185,7 @@
 
           <p class="small-note">Quick actions</p>
           <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+            <!-- keep server invite separate in case you want one; placeholder remains editable -->
             <a id="serverInviteBtn" class="btn" href="#" target="_blank" rel="noreferrer">Join my server</a>
             <a id="discordWidgetLink" class="btn ghost" href="https://discord.com/channels/@me" target="_blank" rel="noreferrer">Open Discord</a>
           </div>
@@ -187,7 +193,7 @@
 
         <div class="card" style="margin-top:14px">
           <h4 style="margin-top:0">How to edit</h4>
-          <p class="muted">Open this repository on GitHub → edit <code>index.html</code> → commit. You can change the progress items or replace placeholders for your profile and invite links.</p>
+          <p class="muted">Open this repository on GitHub → edit <code>index.html</code> → commit. You can change the progress items or replace placeholders for server invite link.</p>
         </div>
       </aside>
     </section>
@@ -198,15 +204,13 @@
   </main>
 
 <script>
-/* ===== Replace placeholders with your actual links in the HTML or via GitHub editor =====
-   - Your Discord profile: https://discord.com/users/YOUR_DISCORD_ID
+/* Replace placeholders if needed:
    - Server invite: https://discord.gg/YOUR_SERVER_INVITE
-   Bot invite is already set with your app id: client_id=1322982244800790608
+   (GitHub CTA already points to your repo.)
 */
-document.getElementById('discordProfileBtn').href = "https://discord.com/users/YOUR_DISCORD_ID";
 document.getElementById('serverInviteBtn').href = "https://discord.gg/YOUR_SERVER_INVITE";
 
-/* small enhancement: subtle fade-in for page once widgets load */
+/* page load tweak (keeps content smooth) */
 window.addEventListener('load', () => {
   document.getElementById('page').style.opacity = 1;
 });
