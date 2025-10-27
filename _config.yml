@@ -1,4 +1,6 @@
 theme: jekyll-theme-minimal
 title: AirPath's homepage
 description: still in development :)
-show_downloads: true
+show_downloads: false
+domain: airpathoncode.github.io
+url: https://AirPathOnCode.github.io
