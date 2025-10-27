@@ -7,28 +7,34 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== Theme (always dark) ===== */
   :root{
-    --bg-a: #071022;   /* deep dark base - covers everything */
+    --bg-a: #071022;
     --glass: rgba(255,255,255,0.04);
     --muted: rgba(255,255,255,0.72);
-    --accent-start: #3b82f6; /* blue */
-    --accent-end: #7c3aed;   /* purple */
+    --accent-start: #3b82f6;
+    --accent-end: #7c3aed;
     --card-blur: 10px;
     --radius: 14px;
     --shadow: 0 8px 30px rgba(2,6,23,0.75);
-    --content-max-width: 1050px; /* keep in sync with .wrap */
+    --content-max-width: 1050px;
   }
   *{box-sizing:border-box}
-  /* prevent accidental horizontal scroll; base darkness everywhere */
-  html,body{height:100%;margin:0;background-color:var(--bg-a);overflow-x:hidden;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e9f2ff;-webkit-font-smoothing:antialiased}
+  /* root-level prevention of horizontal scroll */
+  html,body{
+    height:100%;
+    margin:0;
+    background-color:var(--bg-a);
+    overflow-x:hidden; /* <<-- prevents left/right scroll */
+    font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    color:#e9f2ff;-webkit-font-smoothing:antialiased;
+  }
 
-  /* permanent dark base layer (below animated colored layer) */
-  .dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-4;pointer-events:none}
+  /* Dark base under everything (safe fallback) */
+  .dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-6;pointer-events:none}
 
-  /* animated colorful layer (above dark base but below content) */
+  /* animated colorful layer (centered so it cannot overflow) */
   .background {
-    position:fixed;inset:0;z-index:-3;pointer-events:none;
+    position:fixed;inset:0;z-index:-5;pointer-events:none;
     background:linear-gradient(120deg,var(--accent-start),var(--accent-end));
     background-size:300% 300%;
     animation: bgShift 14s linear infinite;
@@ -37,34 +43,36 @@
   }
   @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
+  /* blobs centered via left:50% + transform; large blur but not causing horizontal overflow */
   .blob{
-    position: absolute;border-radius:50%;filter:blur(80px);opacity:0.35;mix-blend-mode:screen;
-    animation: floaty 14s ease-in-out infinite;
+    position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;mix-blend-mode:screen;
+    animation: floaty 14s ease-in-out infinite; pointer-events:none;
+    left:50%;
+    transform:translateX(-50%);
+    will-change:transform;
   }
-  .blob.a{width:620px;height:620px;left:-12%;top:-10%;background:rgba(59,130,246,0.9);animation-duration:20s}
-  .blob.b{width:520px;height:520px;right:-10%;bottom:-8%;background:rgba(124,58,237,0.88);animation-duration:18s;opacity:0.45}
-  @keyframes floaty{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-22px) scale(1.04)}100%{transform:translateY(0) scale(1)}}
+  .blob.a{width:760px;height:760px;top:-18%;background:rgba(59,130,246,0.9);animation-duration:20s;transform:translateX(-40%)}
+  .blob.b{width:620px;height:620px;bottom:-16%;background:rgba(124,58,237,0.88);animation-duration:18s;opacity:0.45;transform:translateX(38%)}
+  @keyframes floaty{0%{transform:translateY(0) translateX(var(--tx,0)) scale(1)}50%{transform:translateY(-22px) translateX(var(--tx,0)) scale(1.04)}100%{transform:translateY(0) translateX(var(--tx,0)) scale(1)}}
 
-  /* ===== Fixed visual frame (shows content bounds even on scroll) =====
-     - centers and matches the same max width as .wrap
-     - pointer-events:none so it never blocks clicks or taps
-  */
+  /* Fixed visual frame to mark content bounds; centered and clipped */
   .viewport-frame{
     position:fixed;
     left:50%;
     top:20px;
     transform:translateX(-50%);
-    width:calc(min(var(--content-max-width), 100% - 40px));
-    height:calc(100% - 40px);
+    width:calc(min(var(--content-max-width), 100vw - 40px));
+    height:calc(100vh - 40px);
     border-radius:18px;
     border:1px solid rgba(255,255,255,0.05);
     box-shadow: inset 0 0 0 1px rgba(255,255,255,0.01), 0 20px 50px rgba(2,6,23,0.6);
-    z-index: -1; /* below main content but above animated layers so border always visible */
-    pointer-events: none;
+    z-index:-1;
+    pointer-events:none;
     transition:width .22s ease;
+    overflow:hidden;
   }
 
-  /* page container */
+  /* main container */
   .wrap{max-width:var(--content-max-width);margin:48px auto;padding:28px;position:relative;z-index:2}
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;gap:14px;align-items:center}
@@ -91,20 +99,21 @@
   .grid{display:grid;grid-template-columns:1fr 380px;gap:20px;margin-top:22px;align-items:start}
   @media (max-width:860px){ .grid{grid-template-columns:1fr} .wrap{padding:18px} .logo{width:60px;height:60px} .viewport-frame{display:none} }
 
-  /* card style (modern glass) */
+  /* cards */
   .card{
     background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
     border:1px solid rgba(255,255,255,0.04);
     border-radius:var(--radius);padding:18px;backdrop-filter: blur(var(--card-blur));
     box-shadow:var(--shadow);transition:transform .36s cubic-bezier(.2,.9,.3,1), box-shadow .36s ease, border-color .36s ease;
     transform-origin:top center;
+    max-width:100%;
   }
   .card:hover{transform:translateY(-8px);box-shadow:0 26px 70px rgba(2,6,23,0.8);border-color:rgba(255,255,255,0.06)}
 
   .card h3{margin:0 0 8px 0}
   .muted{color:var(--muted);font-size:13px}
 
-  /* progress list modern */
+  /* progress list */
   #progress-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
   .prog-item{
     display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;
@@ -115,12 +124,23 @@
   .prog-item:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(2,6,23,0.6)}
   .tag{font-size:12px;padding:6px 9px;border-radius:999px;background:linear-gradient(90deg,var(--accent-start),var(--accent-end));color:white;font-weight:700}
 
-  /* right column: widget + quick actions */
+  /* widget: ensure responsive and never overflow the viewport */
   .widget-wrap{display:flex;justify-content:center}
-  .discord-widget{width:100%;max-width:350px;height:520px;border-radius:12px;overflow:hidden;border:0;box-shadow:0 20px 50px rgba(2,6,23,0.6)}
+  .discord-widget{
+    width:100%;
+    max-width:350px;
+    height:520px;
+    border-radius:12px;
+    overflow:hidden;
+    border:0;
+    box-shadow:0 20px 50px rgba(2,6,23,0.6);
+    display:block;
+    max-width:100%;
+    box-sizing:border-box; /* important to avoid overflow from padding/borders */
+  }
   .small-note{font-size:12px;color:var(--muted);margin-top:10px}
 
-  /* small animated entry */
+  /* reveal animation */
   .reveal{opacity:0;transform:translateY(12px) scale(.995);animation: revealIn .6s forwards;animation-delay:0.08s}
   .reveal.delay{animation-delay:0.18s}
   .reveal.long{animation-duration:.85s}
@@ -131,15 +151,13 @@
 </style>
 </head>
 <body>
-  <!-- permanent dark base layer -->
   <div class="dark-base" aria-hidden="true"></div>
-
-  <!-- animated colorful layer -->
   <div class="background" aria-hidden="true"></div>
-  <div class="blob a" aria-hidden="true"></div>
-  <div class="blob b" aria-hidden="true"></div>
 
-  <!-- fixed visual frame: shows the maximum content bounds (visible even when scrolling) -->
+  <!-- centered blobs: transform moves them visually but because their center is at 50% they won't create horizontal overflow -->
+  <div class="blob a" aria-hidden="true" style="--tx:-40%"></div>
+  <div class="blob b" aria-hidden="true" style="--tx:38%"></div>
+
   <div class="viewport-frame" aria-hidden="true"></div>
 
   <main class="wrap" id="page">
@@ -153,7 +171,6 @@
       </div>
 
       <div class="controls">
-        <!-- single CTA linking to your GitHub -->
         <a id="githubCta" class="btn" href="https://github.com/AirPathOnCode" target="_blank" rel="noreferrer">View on GitHub — AirPathOnCode</a>
       </div>
     </header>
@@ -201,7 +218,6 @@
           <p class="muted">Live server widget (dark). If it appears blank, enable Server Widget in your Discord server settings.</p>
 
           <div class="widget-wrap" style="margin-top:12px">
-            <!-- Provided widget (kept dark theme) -->
             <iframe id="discordWidget" class="discord-widget"
               src="https://discord.com/widget?id=1432386695785091227&theme=dark"
               allowtransparency="true" frameborder="0"
@@ -232,11 +248,10 @@
 <script>
 /* Replace placeholders if needed:
    - Server invite: https://discord.gg/YOUR_SERVER_INVITE
-   (GitHub CTA already points to your repo.)
 */
 document.getElementById('serverInviteBtn').href = "https://discord.gg/YOUR_SERVER_INVITE";
 
-/* page load tweak (keeps content smooth) */
+/* keep content smooth on load */
 window.addEventListener('load', () => {
   document.getElementById('page').style.opacity = 1;
 });
