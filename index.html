@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="split"><!-- set data-theme="dark" | "purple" | "split" | "halloween" here -->
+<html lang="en" data-theme="purple"><!-- set data-theme="dark" | "purple" | "split" | "halloween" here -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -317,78 +317,8 @@
 })();
 
 /* Insert BG debug helper only when theme === 'split' */
-(function(){
-  try {
-    const theme = document.documentElement.getAttribute('data-theme');
-    if (theme === 'split') {
-      // Debugger UI (same helper provided earlier) - inserts a small top-right panel
-      (function(){
-        const bg = document.querySelector('.background .color');
-        const blobs = Array.from(document.querySelectorAll('.background .blob'));
-        if (!bg) return;
-        const panel = document.createElement('div');
-        panel.style.position = 'fixed';
-        panel.style.right = '12px';
-        panel.style.top = '12px';
-        panel.style.zIndex = 99999;
-        panel.style.background = 'rgba(0,0,0,0.46)';
-        panel.style.backdropFilter = 'blur(6px)';
-        panel.style.border = '1px solid rgba(255,255,255,0.06)';
-        panel.style.padding = '8px';
-        panel.style.borderRadius = '10px';
-        panel.style.fontFamily = 'Inter, system-ui, Arial';
-        panel.style.color = '#eaf3ff';
-        panel.style.fontSize = '13px';
-        panel.style.boxShadow = '0 10px 30px rgba(0,0,0,0.6)';
-        panel.innerHTML = `
-          <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><strong style="font-weight:700">BG Debug (split)</strong></div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <button id="dbgMakeVivid" style="padding:8px;border-radius:8px;border:0;background:linear-gradient(90deg,#3b82f6,#7c3aed);color:white;cursor:pointer">Make vivid</button>
-            <button id="dbgForceNormal" style="padding:8px;border-radius:8px;border:0;background:#223344;color:#cfe7ff;cursor:pointer">Force normal</button>
-            <button id="dbgIncreaseOpacity" style="padding:8px;border-radius:8px;border:0;background:#284B6E;color:#cfe7ff;cursor:pointer">Increase opacity</button>
-            <button id="dbgShow" style="padding:6px;border-radius:8px;border:0;background:transparent;color:#cfe7ff;text-decoration:underline;cursor:pointer">Show values</button>
-          </div>
-          <pre id="dbgInfo" style="margin-top:8px;display:none;background:rgba(0,0,0,0.35);padding:8px;border-radius:6px;color:#dfeefe;white-space:pre-wrap"></pre>
-        `;
-        document.body.appendChild(panel);
-        const original = {
-          colorStyle: bg.getAttribute('style') || '',
-          blobStyles: blobs.map(b => ({ el: b, style: b.getAttribute('style') || '' }))
-        };
-        function showValues(){
-          const info = document.getElementById('dbgInfo');
-          const cs = window.getComputedStyle(bg);
-          const blobInfo = blobs.map((b, i) => {
-            const c = window.getComputedStyle(b);
-            return `blob ${i}: opacity=${c.opacity} filter=${c.filter} transform=${c.transform}`;
-          }).join('\n');
-          info.style.display = 'block';
-          info.textContent = `background .color computed:\n opacity=${cs.opacity}\n mix-blend-mode=${cs.mixBlendMode}\n filter=${cs.filter}\n z-index=${cs.zIndex}\n\n${blobInfo}\n\n(Press 'Force normal' or 'Make vivid')`;
-        }
-        function makeVivid(){
-          bg.style.transition = 'filter 280ms ease, opacity 280ms ease';
-          bg.style.opacity = '1';
-          bg.style.filter = 'contrast(1.18) saturate(1.28) brightness(1.03)';
-          bg.style.mixBlendMode = 'screen';
-          blobs.forEach(b=>{ b.style.opacity='0.72'; b.style.filter='blur(44px)'; b.style.transform = (b.style.transform||'') + ' translateZ(0)'; });
-          showValues();
-        }
-        function forceNormal(){
-          bg.style.mixBlendMode = 'normal'; if (!bg.style.opacity || parseFloat(bg.style.opacity) < 0.85) bg.style.opacity = '0.98'; showValues();
-        }
-        function increaseOpacity(){
-          bg.style.opacity = '1'; blobs.forEach(b=> b.style.opacity = '0.62'); showValues();
-        }
-        panel.querySelector('#dbgMakeVivid').addEventListener('click', makeVivid);
-        panel.querySelector('#dbgForceNormal').addEventListener('click', forceNormal);
-        panel.querySelector('#dbgIncreaseOpacity').addEventListener('click', increaseOpacity);
-        panel.querySelector('#dbgShow').addEventListener('click', showValues);
-      })();
-    }
-  } catch (e) {
-    console.warn('debug injector failed', e);
-  }
-})();
+/* i dleted the debug pannel
+      
 
 /* Helpful comment for you:
    - To change theme: edit the very first line of this file and set data-theme on <html>
