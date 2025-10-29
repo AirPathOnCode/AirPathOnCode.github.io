@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="split"><!-- set data-theme="dark" | "purple" | "split" | "halloween" here -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -7,51 +7,60 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== Base + theme variables (default = dark) ===== */
+  /* ===== Variables & base ===== */
   :root{
-    --bg-a: #071022;
-    --accent-start: #3b82f6;
-    --accent-mid: #8b5cf6;
-    --accent-end: #7c3aed;
-    --muted: rgba(255,255,255,0.76);
-    --content-max-width: 1050px;
-    --radius: 14px;
+    --bg-a:#071022;
+    --accent-start:#3b82f6;
+    --accent-mid:#8b5cf6;
+    --accent-end:#7c3aed;
+    --muted:rgba(255,255,255,0.76);
+    --content-max-width:1050px;
+    --radius:14px;
     --shadow-strong: 0 18px 45px rgba(2,6,23,0.6);
     --shadow-soft: 0 8px 24px rgba(2,6,23,0.45);
-    --loader-height: 4px;
-    --bg-color-overlay: rgba(255,255,255,0.03); /* panel tint */
+    --loader-height:4px;
+    --todo-start:#06b6d4;
+    --todo-end:#7c3aed;
+    --inprog-start:#06b6d4;
+    --inprog-end:#7c3aed;
   }
 
-  /* Theme overrides applied via [data-theme="..."] on <html> */
+  /* Theme overrides (editable via data-theme on <html>) */
   html[data-theme="dark"]{
-    --bg-a: #071022;
-    --accent-start: #3b82f6;
-    --accent-mid: #8b5cf6;
-    --accent-end: #7c3aed;
+    --bg-a:#071022;
+    --accent-start:#3b82f6;
+    --accent-mid:#8b5cf6;
+    --accent-end:#7c3aed;
+    --todo-start:#06b6d4; --todo-end:#7c3aed;
+    --inprog-start:#06b6d4; --inprog-end:#7c3aed;
   }
-
   html[data-theme="purple"]{
-    --bg-a: #051028;
-    --accent-start: #60a5fa;
-    --accent-mid: #9f7aea;
-    --accent-end: #7c3aed;
+    --bg-a:#051028;
+    --accent-start:#60a5fa;
+    --accent-mid:#9f7aea;
+    --accent-end:#7c3aed;
+    --todo-start:#7c3aed; --todo-end:#60a5fa;
+    --inprog-start:#9f7aea; --inprog-end:#7c3aed;
   }
-
+  /* split: left side vivid purple, right side dark (debugger look) */
   html[data-theme="split"]{
-    --bg-a: #071022;
-    --accent-start: #3b82f6;
-    --accent-mid: #8b5cf6;
-    --accent-end: #7c3aed;
+    --bg-a:#071022;
+    --accent-start:#3b82f6;
+    --accent-mid:#8b5cf6;
+    --accent-end:#7c3aed;
+    --todo-start:#06b6d4; --todo-end:#7c3aed;
+    --inprog-start:#06b6d4; --inprog-end:#7c3aed;
   }
-
+  /* halloween orange theme */
   html[data-theme="halloween"]{
-    --bg-a: #050406;
-    --accent-start: #ff8a00; /* orange */
-    --accent-mid: #ff4d00;
-    --accent-end: #ffb86b;
+    --bg-a:#050406;
+    --accent-start:#ff8a00;
+    --accent-mid:#ff4d00;
+    --accent-end:#ffb86b;
+    --todo-start:#ff8a00; --todo-end:#ff4d00;
+    --inprog-start:#ff8a00; --inprog-end:#ffb86b;
   }
 
-  /* ===== general layout/perf-friendly glass UI (keeps previous improvements) ===== */
   *{box-sizing:border-box}
   html,body{
     width:100vw;height:100%;margin:0;padding:0;overflow-x:hidden;touch-action:pan-y;
@@ -65,7 +74,7 @@
   .top-loader .bar::after{content:"";position:absolute;left:-40%;top:0;height:100%;width:40%;background:linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.08));transform:skewX(-18deg);animation:shimmer 1.6s linear infinite}
   @keyframes shimmer{0%{left:-40%}100%{left:140%}}
 
-  /* Decorative background - adapt to theme using CSS vars + special split handling */
+  /* Decorative background */
   .dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-6;pointer-events:none}
   .background{position:fixed;inset:0;z-index:-5;pointer-events:none;overflow:hidden}
   .background .color{
@@ -83,14 +92,19 @@
     will-change: transform;
     transform: translateZ(0);
   }
-  /* split theme uses a different background composition (left dark, right vivid) */
+  /* split: purple on left half, dark on right half */
   html[data-theme="split"] .background .color{
     background:
-      linear-gradient(90deg, rgba(7,16,34,0.96) 0% 50%, rgba(124,58,237,0.85) 50% 100%);
-    filter: contrast(1.04) saturate(1.08);
-    opacity: 0.96;
+      linear-gradient(90deg,
+        /* left vivid */
+        rgba(124,58,237,0.92) 0% 50%,
+        rgba(59,82,133,0.10) 50% 100%
+      );
+    filter: contrast(1.06) saturate(1.12);
+    mix-blend-mode: screen;
+    opacity: 0.98;
   }
-  /* halloween: orange glow */
+  /* halloween orange adjustments */
   html[data-theme="halloween"] .background .color{
     background:
       radial-gradient(40% 40% at 15% 30%, rgba(255,138,0,0.36), transparent 18%),
@@ -101,23 +115,17 @@
 
   @keyframes bgShift{0%{background-position:0% 36%}50%{background-position:100% 64%}100%{background-position:0% 36%}}
 
-  /* blobs (reduced blur for perf) */
   .background .blob{position:absolute;border-radius:50%;filter:blur(48px);opacity:0.46;mix-blend-mode:screen;pointer-events:none;left:50%;transform:translateX(-50%);will-change:transform}
   .background .blob.a{width:720px;height:720px;top:-20%;transform:translateX(-34%);background:radial-gradient(circle at 25% 30%, rgba(59,130,246,0.92), rgba(59,130,246,0.44) 36%, transparent 68%)}
   .background .blob.b{width:620px;height:620px;bottom:-18%;transform:translateX(36%);background:radial-gradient(circle at 72% 72%, rgba(124,58,237,0.92), rgba(124,58,237,0.44) 36%, transparent 68%);opacity:0.48}
-
-  /* Halloween blob colors */
-  html[data-theme="halloween"] .background .blob.a{background:radial-gradient(circle at 30% 30%, rgba(255,138,0,0.95), rgba(255,138,0,0.44) 36%, transparent 68%)}
-  html[data-theme="halloween"] .background .blob.b{background:radial-gradient(circle at 70% 70%, rgba(255,77,0,0.95), rgba(255,77,0,0.42) 36%, transparent 68%);opacity:0.56}
-
-  /* Purple theme stronger blobs */
   html[data-theme="purple"] .background .blob{opacity:0.62}
+  html[data-theme="halloween"] .background .blob.a{background:radial-gradient(circle at 30% 30%, rgba(255,138,0,0.92), rgba(255,138,0,0.44) 36%, transparent 68%)}
+  html[data-theme="halloween"] .background .blob.b{background:radial-gradient(circle at 70% 70%, rgba(255,77,0,0.92), rgba(255,77,0,0.42) 36%, transparent 68%);opacity:0.56}
 
-  /* Frame */
+  /* Frame & layout */
   .viewport-frame{position:fixed;left:50%;top:20px;transform:translateX(-50%);width:calc(min(var(--content-max-width),100vw-40px));height:calc(100vh-40px);border-radius:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.01), 0 20px 50px rgba(2,6,23,0.6);z-index:-1;pointer-events:none;overflow:hidden}
   @media (max-width:860px){ .viewport-frame{display:none} }
 
-  /* Main UI (glass look preserved without heavy backdrop-filter) */
   .wrap{max-width:var(--content-max-width);margin:56px auto;padding:28px;position:relative;z-index:2}
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;gap:14px;align-items:center}
@@ -141,7 +149,12 @@
   #progress-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
   .prog-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02);transition:transform .18s ease, box-shadow .18s ease}
   .prog-item:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(2,6,23,0.55)}
-  .tag{font-size:12px;padding:6px 9px;border-radius:999px;background:linear-gradient(90deg,var(--accent-start),var(--accent-end));color:white;font-weight:700}
+  .tag{font-size:12px;padding:6px 9px;border-radius:999px;color:white;font-weight:700}
+
+/* Tag colors now use CSS variables so they respond to theme */
+  .tag.done{background:linear-gradient(90deg,var(--accent-start),var(--accent-end))}
+  .tag.inprogress{background:linear-gradient(90deg,var(--inprog-start),var(--inprog-end))}
+  .tag.todo{background:linear-gradient(90deg,var(--todo-start),var(--todo-end))}
 
   .widget-wrap{display:flex;justify-content:center}
   .discord-widget{width:100%;max-width:350px;height:auto;border-radius:12px;overflow:hidden;border:0;box-shadow:0 20px 50px rgba(2,6,23,0.45);display:block;box-sizing:border-box}
@@ -161,63 +174,16 @@
   code{background:rgba(255,255,255,0.02);padding:4px 6px;border-radius:6px;font-size:12px}
   img, iframe, video, embed, object{max-width:100% !important;height:auto !important;display:block;box-sizing:border-box}
 
-  /* Theme lever UI (top-right hovering control) */
-  .theme-lever {
-    position: fixed;
-    right: 14px;
-    top: 14px;
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0,0,0,0.36);
-    border: 1px solid rgba(255,255,255,0.06);
-    padding: 8px;
-    border-radius: 999px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    color: #eaf3ff;
-    font-family: Inter, system-ui, Arial;
-    font-size: 13px;
-    backdrop-filter: blur(6px);
+  /* reduce animations if user prefers */
+  @media (prefers-reduced-motion: reduce){
+    .background .color, .background .blob, .top-loader .bar::after { animation: none !important; }
   }
-  .lever-btn {
-    width:44px;height:28px;border-radius:999px;background:linear-gradient(90deg,var(--accent-start),var(--accent-end));
-    border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,0.45);
-    transition:transform .14s ease;outline-offset:3px;
-  }
-  .lever-btn:active{transform:translateY(1px) scale(.996)}
-  .theme-label{min-width:92px;text-align:left;padding-left:6px}
-  .theme-legend{opacity:0.9;font-size:12px;color:var(--muted)}
-  .theme-opts{display:none;margin-left:8px}
-  .theme-lever[aria-expanded="true"] .theme-opts{display:flex;gap:6px}
-  .theme-opts button{padding:6px 8px;border-radius:8px;border:0;background:rgba(255,255,255,0.03);color:var(--muted);cursor:pointer}
-  .theme-opts button:hover{background:rgba(255,255,255,0.04);color:#fff}
-
-  /* accessible focus */
-  .lever-btn:focus{box-shadow:0 8px 30px rgba(0,0,0,0.6), 0 0 0 3px rgba(99,102,241,0.14)}
-  .theme-opts button:focus{outline:2px solid rgba(99,102,241,0.14)}
-  @media (max-width:480px){ .theme-label{display:none} .theme-opts{display:none} .theme-lever{padding:6px} }
 </style>
 </head>
 <body>
   <!-- Loader -->
   <div class="top-loader" aria-hidden="true">
     <div class="bar" id="loaderBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
-  </div>
-
-  <!-- Theme lever control -->
-  <div class="theme-lever" id="themeLever" role="toolbar" aria-label="Theme switcher" aria-expanded="false">
-    <button class="lever-btn" id="leverBtn" title="Cycle themes" aria-pressed="false">⤿</button>
-    <div>
-      <div class="theme-label" id="themeLabel">Dark</div>
-      <div class="theme-legend">Theme</div>
-    </div>
-    <div class="theme-opts" id="themeOpts" aria-hidden="true" style="margin-left:8px">
-      <button data-theme="dark">Dark</button>
-      <button data-theme="purple">Purple</button>
-      <button data-theme="split">Split</button>
-      <button data-theme="halloween">Halloween</button>
-    </div>
   </div>
 
   <!-- Background -->
@@ -260,7 +226,7 @@
                 <div style="font-weight:700">2025-10-01 — Built responsive homepage UI</div>
                 <div class="muted" style="margin-top:6px">Clean layout + deploy-ready for GitHub Pages</div>
               </div>
-              <div class="tag">Done</div>
+              <div class="tag done">Done</div>
             </li>
 
             <li class="prog-item">
@@ -268,7 +234,7 @@
                 <div style="font-weight:700">2025-09-20 — Added bot invite flow</div>
                 <div class="muted" style="margin-top:6px">Invite link generated (app id included)</div>
               </div>
-              <div class="tag" style="background:linear-gradient(90deg,#06b6d4,#7c3aed)">In progress</div>
+              <div class="tag inprogress">In progress</div>
             </li>
 
             <li class="prog-item">
@@ -276,7 +242,7 @@
                 <div style="font-weight:700">2025-09-05 — Connected Discord widget</div>
                 <div class="muted" style="margin-top:6px">Widget embedded and styled</div>
               </div>
-              <div class="tag" style="background:linear-gradient(90deg,#64748b,#0ea5a4)">To do</div>
+              <div class="tag todo">To do</div>
             </li>
           </ul>
         </div>
@@ -303,10 +269,6 @@
         <div class="card" style="margin-top:14px">
           <h4 style="margin-top:0">How to edit</h4>
           <p class="muted">Open this repository on GitHub → edit <code>index.html</code> → commit. You can change the progress items or replace placeholders for a server invite link.</p>
-          <nav class="small-links" style="margin-top:12px">
-            <a href="about.html">About me</a>
-            <a href="license.html">License</a>
-          </nav>
         </div>
       </aside>
     </section>
@@ -321,7 +283,7 @@
   </div>
 
 <script>
-/* ===== Loader simulation (unchanged) ===== */
+/* Loader simulation */
 (function(){
   const bar = document.getElementById('loaderBar');
   let progress = 0;
@@ -335,106 +297,104 @@
     if (progress < 98) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
-
   window.addEventListener('load', ()=>{
     setTimeout(()=>{
       bar.style.transition = 'width 380ms cubic-bezier(.2,.9,.3,1)';
       bar.style.width = '100%';
       bar.setAttribute('aria-valuenow', 100);
-      setTimeout(()=>{
-        const loader = document.querySelector('.top-loader');
-        if (loader) loader.style.transition = 'opacity 420ms ease';
-        if (loader) loader.style.opacity = '0';
-        setTimeout(()=>{ if (loader && loader.parentNode) loader.parentNode.removeChild(loader); }, 700);
-      }, 420);
-
-      const p = document.getElementById('page');
-      if (p){ p.style.transition = 'opacity 420ms ease'; p.style.opacity = 1; }
+      setTimeout(()=>{ const loader = document.querySelector('.top-loader'); if (loader) loader.style.transition = 'opacity 420ms ease'; if (loader) loader.style.opacity = '0'; setTimeout(()=>{ if (loader && loader.parentNode) loader.parentNode.removeChild(loader); },700); }, 420);
+      const p = document.getElementById('page'); if (p){ p.style.transition = 'opacity 420ms ease'; p.style.opacity = 1; }
     }, 180);
   });
 })();
 
-/* ===== Theme lever behavior =====
- - cycles through themes on lever click
- - clicking the small option buttons picks theme directly
- - persists choice in localStorage
- - accessible via keyboard (Enter/Space cycles)
-*/
-(function(){
-  const themes = ['dark','purple','split','halloween'];
-  const labels = { dark: 'Dark', purple: 'Purple', split: 'Split', halloween: 'Halloween' };
-  const lever = document.getElementById('themeLever');
-  const btn = document.getElementById('leverBtn');
-  const label = document.getElementById('themeLabel');
-  const opts = document.getElementById('themeOpts');
-
-  function applyTheme(name, save=true){
-    if (!name) return;
-    document.documentElement.setAttribute('data-theme', name);
-    label.textContent = labels[name] || name;
-    // accessibility state
-    lever.setAttribute('aria-expanded', 'false');
-    opts.setAttribute('aria-hidden', 'true');
-    // persist
-    if (save) localStorage.setItem('ap_theme', name);
-    // small visual pulse
-    btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 260, easing: 'ease-out' });
-  }
-
-  // load saved or system preference (if any)
-  const saved = localStorage.getItem('ap_theme');
-  if (saved && themes.includes(saved)) applyTheme(saved, false);
-  else {
-    // default: dark
-    applyTheme('dark', false);
-  }
-
-  // cycle on main lever click
-  btn.addEventListener('click', ()=> {
-    // find current index
-    const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-    const idx = themes.indexOf(cur);
-    const next = themes[(idx + 1) % themes.length];
-    applyTheme(next);
-  });
-
-  // keyboard accessible: Enter/Space cycles
-  btn.addEventListener('keydown', (ev)=>{
-    if (ev.key === 'Enter' || ev.key === ' '){
-      ev.preventDefault();
-      btn.click();
-    }
-  });
-
-  // toggle expanded small options on long click or click the label
-  lever.addEventListener('mouseenter', ()=> { lever.setAttribute('aria-expanded','true'); opts.setAttribute('aria-hidden','false'); });
-  lever.addEventListener('mouseleave', ()=> { lever.setAttribute('aria-expanded','false'); opts.setAttribute('aria-hidden','true'); });
-
-  // direct option buttons
-  opts.querySelectorAll('button[data-theme]').forEach(b=>{
-    b.addEventListener('click', (e)=>{
-      const t = e.currentTarget.getAttribute('data-theme');
-      applyTheme(t);
-    });
-  });
-
-  // small: support theme via url param ?theme=purple
-  (function checkUrlParam(){
-    try{
-      const p = new URLSearchParams(location.search);
-      const t = p.get('theme');
-      if (t && themes.includes(t)) applyTheme(t);
-    }catch(e){}
-  })();
-})();
-
-/* ===== Promote blobs to their own layer for smoother animation (help compositing) ===== */
+/* Promote blobs to a GPU layer for smoother animation */
 (function(){
   document.querySelectorAll('.background .blob').forEach(b=>{
     b.style.transform = (b.style.transform || '') + ' translateZ(0)';
     b.style.willChange = 'transform, opacity';
   });
 })();
+
+/* Insert BG debug helper only when theme === 'split' */
+(function(){
+  try {
+    const theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'split') {
+      // Debugger UI (same helper provided earlier) - inserts a small top-right panel
+      (function(){
+        const bg = document.querySelector('.background .color');
+        const blobs = Array.from(document.querySelectorAll('.background .blob'));
+        if (!bg) return;
+        const panel = document.createElement('div');
+        panel.style.position = 'fixed';
+        panel.style.right = '12px';
+        panel.style.top = '12px';
+        panel.style.zIndex = 99999;
+        panel.style.background = 'rgba(0,0,0,0.46)';
+        panel.style.backdropFilter = 'blur(6px)';
+        panel.style.border = '1px solid rgba(255,255,255,0.06)';
+        panel.style.padding = '8px';
+        panel.style.borderRadius = '10px';
+        panel.style.fontFamily = 'Inter, system-ui, Arial';
+        panel.style.color = '#eaf3ff';
+        panel.style.fontSize = '13px';
+        panel.style.boxShadow = '0 10px 30px rgba(0,0,0,0.6)';
+        panel.innerHTML = `
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><strong style="font-weight:700">BG Debug (split)</strong></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button id="dbgMakeVivid" style="padding:8px;border-radius:8px;border:0;background:linear-gradient(90deg,#3b82f6,#7c3aed);color:white;cursor:pointer">Make vivid</button>
+            <button id="dbgForceNormal" style="padding:8px;border-radius:8px;border:0;background:#223344;color:#cfe7ff;cursor:pointer">Force normal</button>
+            <button id="dbgIncreaseOpacity" style="padding:8px;border-radius:8px;border:0;background:#284B6E;color:#cfe7ff;cursor:pointer">Increase opacity</button>
+            <button id="dbgShow" style="padding:6px;border-radius:8px;border:0;background:transparent;color:#cfe7ff;text-decoration:underline;cursor:pointer">Show values</button>
+          </div>
+          <pre id="dbgInfo" style="margin-top:8px;display:none;background:rgba(0,0,0,0.35);padding:8px;border-radius:6px;color:#dfeefe;white-space:pre-wrap"></pre>
+        `;
+        document.body.appendChild(panel);
+        const original = {
+          colorStyle: bg.getAttribute('style') || '',
+          blobStyles: blobs.map(b => ({ el: b, style: b.getAttribute('style') || '' }))
+        };
+        function showValues(){
+          const info = document.getElementById('dbgInfo');
+          const cs = window.getComputedStyle(bg);
+          const blobInfo = blobs.map((b, i) => {
+            const c = window.getComputedStyle(b);
+            return `blob ${i}: opacity=${c.opacity} filter=${c.filter} transform=${c.transform}`;
+          }).join('\n');
+          info.style.display = 'block';
+          info.textContent = `background .color computed:\n opacity=${cs.opacity}\n mix-blend-mode=${cs.mixBlendMode}\n filter=${cs.filter}\n z-index=${cs.zIndex}\n\n${blobInfo}\n\n(Press 'Force normal' or 'Make vivid')`;
+        }
+        function makeVivid(){
+          bg.style.transition = 'filter 280ms ease, opacity 280ms ease';
+          bg.style.opacity = '1';
+          bg.style.filter = 'contrast(1.18) saturate(1.28) brightness(1.03)';
+          bg.style.mixBlendMode = 'screen';
+          blobs.forEach(b=>{ b.style.opacity='0.72'; b.style.filter='blur(44px)'; b.style.transform = (b.style.transform||'') + ' translateZ(0)'; });
+          showValues();
+        }
+        function forceNormal(){
+          bg.style.mixBlendMode = 'normal'; if (!bg.style.opacity || parseFloat(bg.style.opacity) < 0.85) bg.style.opacity = '0.98'; showValues();
+        }
+        function increaseOpacity(){
+          bg.style.opacity = '1'; blobs.forEach(b=> b.style.opacity = '0.62'); showValues();
+        }
+        panel.querySelector('#dbgMakeVivid').addEventListener('click', makeVivid);
+        panel.querySelector('#dbgForceNormal').addEventListener('click', forceNormal);
+        panel.querySelector('#dbgIncreaseOpacity').addEventListener('click', increaseOpacity);
+        panel.querySelector('#dbgShow').addEventListener('click', showValues);
+      })();
+    }
+  } catch (e) {
+    console.warn('debug injector failed', e);
+  }
+})();
+
+/* Helpful comment for you:
+   - To change theme: edit the very first line of this file and set data-theme on <html>
+     e.g. <html lang="en" data-theme="halloween"> then commit on GitHub.
+   - Possible values: dark, purple, split, halloween
+*/
 </script>
 </body>
 </html>
