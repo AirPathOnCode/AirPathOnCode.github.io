@@ -36,38 +36,46 @@
     height: 100%;
     width: 0%;
     background: linear-gradient(90deg, var(--accent-start), var(--accent-mid), var(--accent-end));
-    box-shadow: 0 2px 8px rgba(92,33,255,0.18), 0 0 28px rgba(59,130,246,0.06);
+    box-shadow: 0 2px 8px rgba(92,33,255,0.12), 0 0 20px rgba(59,130,246,0.04);
     transition: width 200ms ease-out;
     position: relative;
     overflow: hidden;
   }
-  /* shimmer */
   .top-loader .bar::after{
     content:""; position:absolute; left:-40%; top:0; height:100%; width:40%;
-    background: linear-gradient(90deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02), rgba(255,255,255,0.10));
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.08));
     transform: skewX(-18deg);
     animation: shimmer 1.6s linear infinite;
   }
   @keyframes shimmer{0%{left:-40%}100%{left:140%}}
 
-  /* ---------- Background (richer) ---------- */
+  /* ---------- Background (subtler + covers deep scroll) ---------- */
   .dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-6;pointer-events:none}
+
+  /* clipped decorative layer */
   .background{position:fixed;inset:0;z-index:-5;pointer-events:none;overflow:hidden}
   .background .color{
-    position:absolute;left:50%;top:0;transform:translateX(-50%);width:240vw;height:130vh;
+    position:absolute;left:50%;top:0;transform:translateX(-50%);
+    width:260vw;            /* very wide visual canvas but clipped by overflow:hidden */
+    height:400vh;           /* covers long pages so no cut appears when scrolling */
     background:
-      radial-gradient(60% 60% at 8% 30%, rgba(59,130,246,0.36), transparent 18%),
-      radial-gradient(45% 45% at 92% 70%, rgba(124,58,237,0.32), transparent 22%),
+      radial-gradient(60% 60% at 8% 30%, rgba(59,130,246,0.22), transparent 18%),
+      radial-gradient(45% 45% at 92% 70%, rgba(124,58,237,0.20), transparent 22%),
       linear-gradient(120deg,var(--accent-start),var(--accent-mid),var(--accent-end));
-    background-size:300% 300%;
-    animation:bgShift 14s linear infinite;
-    mix-blend-mode:screen;filter:contrast(1.16) saturate(1.2) hue-rotate(-3deg);
+    background-size: 300% 300%;
+    animation:bgShift 18s linear infinite;
+    mix-blend-mode: screen;
+    /* slightly reduced contrast/saturation so glass stays legible */
+    filter: contrast(1.06) saturate(1.08) hue-rotate(-2deg) brightness(1.02);
+    opacity: 0.95;
   }
   @keyframes bgShift{0%{background-position:0% 40%}50%{background-position:100% 60%}100%{background-position:0% 40%}}
-  .background .blob{position:absolute;border-radius:50%;filter:blur(84px);opacity:0.56;mix-blend-mode:screen;pointer-events:none;left:50%;transform:translateX(-50%)}
-  .background .blob.a{width:900px;height:900px;top:-24%;transform:translateX(-36%);background:radial-gradient(circle at 25% 30%, rgba(59,130,246,0.98), rgba(59,130,246,0.66) 36%, transparent 70%)}
-  .background .blob.b{width:740px;height:740px;bottom:-22%;transform:translateX(38%);background:radial-gradient(circle at 72% 72%, rgba(124,58,237,0.98), rgba(124,58,237,0.66) 36%, transparent 70%);opacity:0.62}
-  body:not(:hover) .background .blob{opacity:0.5}
+
+  .background .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.48;mix-blend-mode:screen;pointer-events:none;left:50%;transform:translateX(-50%);}
+  .background .blob.a{width:980px;height:980px;top:-28%;transform:translateX(-36%);background:radial-gradient(circle at 25% 30%, rgba(59,130,246,0.86), rgba(59,130,246,0.48) 36%, transparent 70%)}
+  .background .blob.b{width:800px;height:800px;bottom:-26%;transform:translateX(38%);background:radial-gradient(circle at 72% 72%, rgba(124,58,237,0.86), rgba(124,58,237,0.48) 36%, transparent 70%);opacity:0.52}
+  /* very slightly dim when not hovered */
+  body:not(:hover) .background .blob{opacity:0.44}
 
   /* ---------- Fixed content frame ---------- */
   .viewport-frame{position:fixed;left:50%;top:20px;transform:translateX(-50%);width:calc(min(var(--content-max-width),100vw-40px));height:calc(100vh-40px);border-radius:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.01), 0 20px 50px rgba(2,6,23,0.6);z-index:-1;pointer-events:none;overflow:hidden}
@@ -109,12 +117,12 @@
   .reveal.long{animation-duration:.85s}
   @keyframes revealIn{to{opacity:1;transform:translateY(0) scale(1)}}
 
-  footer{text-align:center;margin-top:22px;color:var(--muted);font-size:13px}
-  code{background:rgba(255,255,255,0.02);padding:4px 6px;border-radius:6px;font-size:12px}
+  footer{text-align:center;margin-top:22px;color:var(--muted);font-size:13px;display:block;padding-top:24px}
+  footer .small-links{display:flex;gap:18px;justify-content:center;margin-top:12px}
+  footer .small-links a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,0.04);padding-bottom:2px}
 
+  code{background:rgba(255,255,255,0.02);padding:4px 6px;border-radius:6px;font-size:12px}
   img, iframe, video, embed, object{max-width:100% !important;height:auto !important;display:block;box-sizing:border-box}
-  nav.small-links{display:flex;gap:12px;align-items:center;font-size:13px}
-  nav.small-links a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,0.04);padding-bottom:2px}
 </style>
 </head>
 <body>
@@ -206,29 +214,27 @@
         <div class="card" style="margin-top:14px">
           <h4 style="margin-top:0">How to edit</h4>
           <p class="muted">Open this repository on GitHub → edit <code>index.html</code> → commit. You can change the progress items or replace placeholders for a server invite link.</p>
-          <nav class="small-links" style="margin-top:12px">
-            <a href="about.html">About me</a>
-            <a href="license.html">License</a>
-          </nav>
         </div>
       </aside>
     </section>
 
-    <footer class="reveal" style="margin-top:22px">
+    <footer class="reveal" style="margin-top:36px">
       Published with GitHub Pages • Edit <code>index.html</code> to update this page.
+
+      <!-- moved the small links below the footer text as requested -->
+      <div class="small-links" style="margin-top:14px">
+        <a href="about.html">About me</a>
+        <a href="license.html">License</a>
+      </div>
     </footer>
   </div>
 
 <script>
-/* Loader simulation: progressive growth until page load completes.
-   - Shows an initial fast grow, slows near 85%, then completes on load.
-*/
+/* Loader simulation */
 (function(){
   const bar = document.getElementById('loaderBar');
   let progress = 0;
-  // start a fake progress
   const step = ()=> {
-    // small step logic: fast early, slow later
     if (progress < 60) { progress += Math.random() * 8 + 6; }
     else if (progress < 85) { progress += Math.random() * 4 + 1; }
     else if (progress < 98) { progress += Math.random() * 1 + 0.1; }
@@ -239,22 +245,17 @@
   };
   requestAnimationFrame(step);
 
-  // When fully loaded, animate to 100% then hide
   window.addEventListener('load', ()=>{
-    // small delay so user sees finalization
     setTimeout(()=>{
       bar.style.transition = 'width 400ms cubic-bezier(.2,.9,.3,1)';
       bar.style.width = '100%';
       bar.setAttribute('aria-valuenow', 100);
-      // fade out the loader after the bar fills
       setTimeout(()=> {
         const loader = document.querySelector('.top-loader');
         if (loader) loader.style.transition = 'opacity 400ms ease';
         if (loader) loader.style.opacity = '0';
-        // remove loader from flow after fade
         setTimeout(()=> { if (loader && loader.parentNode) loader.parentNode.removeChild(loader); }, 700);
       }, 450);
-      // reveal main page content
       const p = document.getElementById('page');
       if (p) p.style.transition = 'opacity 420ms ease';
       if (p) p.style.opacity = 1;
