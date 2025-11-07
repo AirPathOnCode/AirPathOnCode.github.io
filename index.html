@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="purple"><!-- set data-theme="dark" | "purple" | "split" | "halloween" here -->
+<html lang="en" data-theme="purple-light"><!-- set data-theme="dark" | "purple" | "purple-light" | "split" | "halloween" | "winter" -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -7,177 +7,258 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== Variables & base ===== */
-  :root{
-    --bg-a:#071022;
-    --accent-start:#3b82f6;
-    --accent-mid:#8b5cf6;
-    --accent-end:#7c3aed;
-    --muted:rgba(255,255,255,0.76);
-    --content-max-width:1050px;
-    --radius:14px;
-    --shadow-strong: 0 18px 45px rgba(2,6,23,0.6);
-    --shadow-soft: 0 8px 24px rgba(2,6,23,0.45);
-    --loader-height:4px;
-    --todo-start:#06b6d4;
-    --todo-end:#7c3aed;
-    --inprog-start:#06b6d4;
-    --inprog-end:#7c3aed;
-  }
+/* -------------------------
+   CORE VARIABLES + THEMES
+   ------------------------- */
+:root{
+  --bg-a:#071022;
+  --accent-start:#3b82f6;
+  --accent-mid:#8b5cf6;
+  --accent-end:#7c3aed;
+  --muted:rgba(255,255,255,0.76);
+  --content-max-width:1050px;
+  --radius:14px;
+  --shadow-strong:0 18px 45px rgba(2,6,23,0.6);
+  --loader-height:4px;
 
-  /* Theme overrides (editable via data-theme on <html>) */
-  html[data-theme="dark"]{
-    --bg-a:#071022;
-    --accent-start:#3b82f6;
-    --accent-mid:#8b5cf6;
-    --accent-end:#7c3aed;
-    --todo-start:#06b6d4; --todo-end:#7c3aed;
-    --inprog-start:#06b6d4; --inprog-end:#7c3aed;
-  }
-  html[data-theme="purple"]{
-    --bg-a:#051028;
-    --accent-start:#60a5fa;
-    --accent-mid:#9f7aea;
-    --accent-end:#7c3aed;
-    --todo-start:#7c3aed; --todo-end:#60a5fa;
-    --inprog-start:#9f7aea; --inprog-end:#7c3aed;
-  }
-  /* split: left side vivid purple, right side dark (debugger look) */
-  html[data-theme="split"]{
-    --bg-a:#071022;
-    --accent-start:#3b82f6;
-    --accent-mid:#8b5cf6;
-    --accent-end:#7c3aed;
-    --todo-start:#06b6d4; --todo-end:#7c3aed;
-    --inprog-start:#06b6d4; --inprog-end:#7c3aed;
-  }
-  /* halloween orange theme */
-  html[data-theme="halloween"]{
-    --bg-a:#050406;
-    --accent-start:#ff8a00;
-    --accent-mid:#ff4d00;
-    --accent-end:#ffb86b;
-    --todo-start:#ff8a00; --todo-end:#ff4d00;
-    --inprog-start:#ff8a00; --inprog-end:#ffb86b;
-  }
+  /* progress tag fallbacks */
+  --todo-start:#06b6d4; --todo-end:#7c3aed;
+  --inprog-start:#06b6d4; --inprog-end:#7c3aed;
+}
 
-  *{box-sizing:border-box}
-  html,body{
-    width:100vw;height:100%;margin:0;padding:0;overflow-x:hidden;touch-action:pan-y;
-    background-color:var(--bg-a);font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e9f2ff;
-    -webkit-font-smoothing:antialiased;
-  }
+/* dark (default look) */
+html[data-theme="dark"]{
+  --bg-a:#071022;
+  --accent-start:#3b82f6; --accent-mid:#8b5cf6; --accent-end:#7c3aed;
+  --todo-start:#06b6d4; --todo-end:#7c3aed;
+  --inprog-start:#06b6d4; --inprog-end:#7c3aed;
+}
 
-  /* Loader */
-  .top-loader{position:fixed;left:0;top:0;width:100%;height:var(--loader-height);z-index:9999;pointer-events:none}
-  .top-loader .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent-start),var(--accent-mid),var(--accent-end));box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:width 180ms ease-out;position:relative;overflow:hidden;transform:translateZ(0);will-change:width}
-  .top-loader .bar::after{content:"";position:absolute;left:-40%;top:0;height:100%;width:40%;background:linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.08));transform:skewX(-18deg);animation:shimmer 1.6s linear infinite}
-  @keyframes shimmer{0%{left:-40%}100%{left:140%}}
+/* vivid purple (darker/bright) */
+html[data-theme="purple"]{
+  --bg-a:#041026;
+  --accent-start:#60a5fa; --accent-mid:#9f7aea; --accent-end:#7c3aed;
+  --todo-start:#7c3aed; --todo-end:#60a5fa;
+  --inprog-start:#9f7aea; --inprog-end:#7c3aed;
+}
 
-  /* Decorative background */
-  .dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-6;pointer-events:none}
-  .background{position:fixed;inset:0;z-index:-5;pointer-events:none;overflow:hidden}
-  .background .color{
-    position:absolute;left:50%;top:0;transform:translateX(-50%);
-    width:260vw;height:300vh;
-    background:
-      radial-gradient(55% 60% at 8% 28%, rgba(59,130,246,0.32), transparent 22%),
-      radial-gradient(48% 48% at 92% 72%, rgba(124,58,237,0.30), transparent 24%),
-      linear-gradient(120deg,var(--accent-start),var(--accent-mid),var(--accent-end));
-    background-size: 280% 280%;
-    animation: bgShift 18s linear infinite;
-    mix-blend-mode: screen;
-    filter: contrast(1.08) saturate(1.12) hue-rotate(-2deg);
-    opacity: 0.98;
-    will-change: transform;
-    transform: translateZ(0);
-  }
-  /* split: purple on left half, dark on right half */
-  html[data-theme="split"] .background .color{
-    background:
-      linear-gradient(90deg,
-        /* left vivid */
-        rgba(124,58,237,0.92) 0% 50%,
-        rgba(59,82,133,0.10) 50% 100%
-      );
-    filter: contrast(1.06) saturate(1.12);
-    mix-blend-mode: screen;
-    opacity: 0.98;
-  }
-  /* halloween orange adjustments */
-  html[data-theme="halloween"] .background .color{
-    background:
-      radial-gradient(40% 40% at 15% 30%, rgba(255,138,0,0.36), transparent 18%),
-      radial-gradient(40% 40% at 88% 70%, rgba(255,77,0,0.28), transparent 20%),
-      linear-gradient(100deg,var(--accent-start),var(--accent-mid),var(--accent-end));
-    filter: contrast(1.06) saturate(1.26) hue-rotate(6deg);
-  }
+/* purple-light: pastel, lighter panels for a 'light' purple vibe */
+html[data-theme="purple-light"]{
+  --bg-a:#f5f6fb; /* very light background */
+  --accent-start:#8b5cf6; --accent-mid:#b695ff; --accent-end:#cdb7ff;
+  --muted:rgba(8,10,20,0.6);
+  --todo-start:#b695ff; --todo-end:#8b5cf6;
+  --inprog-start:#9f7aea; --inprog-end:#8b5cf6;
+}
 
-  @keyframes bgShift{0%{background-position:0% 36%}50%{background-position:100% 64%}100%{background-position:0% 36%}}
+/* split: left vivid purple, right dark */
+html[data-theme="split"]{
+  --bg-a:#071022;
+  --accent-start:#3b82f6; --accent-mid:#8b5cf6; --accent-end:#7c3aed;
+  --todo-start:#06b6d4; --todo-end:#7c3aed;
+  --inprog-start:#06b6d4; --inprog-end:#7c3aed;
+}
 
-  .background .blob{position:absolute;border-radius:50%;filter:blur(48px);opacity:0.46;mix-blend-mode:screen;pointer-events:none;left:50%;transform:translateX(-50%);will-change:transform}
-  .background .blob.a{width:720px;height:720px;top:-20%;transform:translateX(-34%);background:radial-gradient(circle at 25% 30%, rgba(59,130,246,0.92), rgba(59,130,246,0.44) 36%, transparent 68%)}
-  .background .blob.b{width:620px;height:620px;bottom:-18%;transform:translateX(36%);background:radial-gradient(circle at 72% 72%, rgba(124,58,237,0.92), rgba(124,58,237,0.44) 36%, transparent 68%);opacity:0.48}
-  html[data-theme="purple"] .background .blob{opacity:0.62}
-  html[data-theme="halloween"] .background .blob.a{background:radial-gradient(circle at 30% 30%, rgba(255,138,0,0.92), rgba(255,138,0,0.44) 36%, transparent 68%)}
-  html[data-theme="halloween"] .background .blob.b{background:radial-gradient(circle at 70% 70%, rgba(255,77,0,0.92), rgba(255,77,0,0.42) 36%, transparent 68%);opacity:0.56}
+/* halloween: orange/black */
+html[data-theme="halloween"]{
+  --bg-a:#050406;
+  --accent-start:#ff8a00; --accent-mid:#ff4d00; --accent-end:#ffb86b;
+  --todo-start:#ff8a00; --todo-end:#ff4d00;
+  --inprog-start:#ff8a00; --inprog-end:#ffb86b;
+}
 
-  /* Frame & layout */
-  .viewport-frame{position:fixed;left:50%;top:20px;transform:translateX(-50%);width:calc(min(var(--content-max-width),100vw-40px));height:calc(100vh-40px);border-radius:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.01), 0 20px 50px rgba(2,6,23,0.6);z-index:-1;pointer-events:none;overflow:hidden}
-  @media (max-width:860px){ .viewport-frame{display:none} }
+/* winter: icy background & white snowflakes */
+html[data-theme="winter"]{
+  --bg-a:#071227; /* cooler */
+  --accent-start:#9be7ff; --accent-mid:#81d4ff; --accent-end:#bfeeff;
+  --muted:rgba(230,245,255,0.78);
+  --todo-start:#bfeeff; --todo-end:#81d4ff;
+  --inprog-start:#9be7ff; --inprog-end:#bfeeff;
+}
 
-  .wrap{max-width:var(--content-max-width);margin:56px auto;padding:28px;position:relative;z-index:2}
-  header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .brand{display:flex;gap:14px;align-items:center}
-  .logo{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);font-weight:800;color:white;font-size:20px;box-shadow:var(--shadow-soft)}
-  h1{margin:0;font-size:20px;letter-spacing:0.2px}
-  p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
-  .controls{display:flex;gap:10px;align-items:center}
-  .btn{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));color:#eaf3ff;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 18px rgba(2,6,23,0.5);transform:translateZ(0);transition:transform .18s ease, box-shadow .18s ease}
-  .btn:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(3,7,23,0.5)}
-  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-  .btn.full{display:block;width:100%;text-align:center;padding:14px 16px;border-radius:12px;box-sizing:border-box}
+/* -------------------------
+   BASE LAYOUT & PERF
+   ------------------------- */
+*{box-sizing:border-box}
+html,body{
+  width:100vw;height:100%;margin:0;padding:0;overflow-x:hidden;touch-action:pan-y;
+  background-color:var(--bg-a);font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:var(--muted);
+  -webkit-font-smoothing:antialiased;
+}
 
-  .grid{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:22px;align-items:start}
-  @media (max-width:860px){ .grid{grid-template-columns:1fr} .wrap{padding:18px} .logo{width:60px;height:60px} }
+/* Small responsive typography helpers (useable in templates) */
+h1{font-size:clamp(18px,2.2vw,24px);margin:0}
+p, .muted{font-size:clamp(13px,1.2vw,15px)}
 
-  .card{background: rgba(255,255,255,0.03);border-radius:var(--radius);padding:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:var(--shadow-strong);transition:transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease, border-color .28s ease;transform-origin:top center;will-change:transform;contain:paint}
-  .card:hover{transform:translateY(-8px);box-shadow:0 28px 80px rgba(2,6,23,0.78);border-color:rgba(255,255,255,0.06)}
-  .card h3{margin:0 0 8px 0}
-  .muted{color:var(--muted);font-size:13px}
+/* -------------------------
+   LOADER
+   ------------------------- */
+.top-loader{position:fixed;left:0;top:0;width:100%;height:var(--loader-height);z-index:9999;pointer-events:none}
+.top-loader .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent-start),var(--accent-mid),var(--accent-end));transition:width 180ms ease-out;position:relative;overflow:hidden;transform:translateZ(0);will-change:width}
+.top-loader .bar::after{content:"";position:absolute;left:-40%;top:0;height:100%;width:40%;background:linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.08));transform:skewX(-18deg);animation:shimmer 1.6s linear infinite}
+@keyframes shimmer{0%{left:-40%}100%{left:140%}}
 
-  #progress-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
-  .prog-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02);transition:transform .18s ease, box-shadow .18s ease}
-  .prog-item:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(2,6,23,0.55)}
-  .tag{font-size:12px;padding:6px 9px;border-radius:999px;color:white;font-weight:700}
+/* -------------------------
+   BACKGROUND (animated)
+   ------------------------- */
+.dark-base{position:fixed;inset:0;background-color:var(--bg-a);z-index:-6;pointer-events:none}
+.background{position:fixed;inset:0;z-index:-5;pointer-events:none;overflow:hidden}
 
-/* Tag colors now use CSS variables so they respond to theme */
-  .tag.done{background:linear-gradient(90deg,var(--accent-start),var(--accent-end))}
-  .tag.inprogress{background:linear-gradient(90deg,var(--inprog-start),var(--inprog-end))}
-  .tag.todo{background:linear-gradient(90deg,var(--todo-start),var(--todo-end))}
+/* default animated color canvas (used by purple themes) */
+.background .color{
+  position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:260vw;height:300vh;
+  background:
+    radial-gradient(60% 60% at 8% 28%, rgba(59,130,246,0.32), transparent 22%),
+    radial-gradient(50% 50% at 90% 70%, rgba(124,58,237,0.26), transparent 24%),
+    linear-gradient(120deg,var(--accent-start),var(--accent-mid),var(--accent-end));
+  background-size:300% 300%;
+  animation: bgShift 18s linear infinite;
+  mix-blend-mode: screen;
+  filter: contrast(1.12) saturate(1.18) hue-rotate(-3deg);
+  opacity:0.98; will-change:transform; transform:translateZ(0);
+}
 
-  .widget-wrap{display:flex;justify-content:center}
-  .discord-widget{width:100%;max-width:350px;height:auto;border-radius:12px;overflow:hidden;border:0;box-shadow:0 20px 50px rgba(2,6,23,0.45);display:block;box-sizing:border-box}
-  .discord-widget iframe{width:100%;height:min(520px,72vh);display:block;border:0;box-sizing:border-box}
-  @media (max-width:420px){ .discord-widget iframe{height:min(420px,58vh)} }
+/* purple theme stronger canvas */
+html[data-theme="purple"] .background .color{
+  background:
+    radial-gradient(60% 60% at 8% 28%, rgba(96,165,250,0.44), transparent 20%),
+    radial-gradient(48% 48% at 92% 72%, rgba(159,122,234,0.36), transparent 22%),
+    linear-gradient(120deg,var(--accent-start),var(--accent-mid),var(--accent-end));
+  filter: contrast(1.18) saturate(1.28) brightness(1.02); opacity:1;
+}
 
-  .small-note{font-size:12px;color:var(--muted);margin-top:10px}
-  .reveal{opacity:0;transform:translateY(10px) scale(.997);animation: revealIn .5s forwards;animation-delay:0.06s}
-  .reveal.delay{animation-delay:0.12s}
-  .reveal.long{animation-duration:.72s}
-  @keyframes revealIn{to{opacity:1;transform:translateY(0) scale(1)}}
+/* purple-light: a subtler pastel animated canvas (lighter) */
+html[data-theme="purple-light"] .background .color{
+  background:
+    radial-gradient(50% 40% at 8% 28%, rgba(139,92,246,0.22), transparent 20%),
+    radial-gradient(40% 30% at 92% 70%, rgba(189,165,255,0.18), transparent 20%),
+    linear-gradient(120deg,var(--accent-start),var(--accent-mid),var(--accent-end));
+  filter:contrast(1.04) saturate(1.06) brightness(1.02);
+  opacity:1;
+}
 
-  footer{text-align:center;margin-top:22px;color:var(--muted);font-size:13px;display:block;padding-top:24px}
-  footer .small-links{display:flex;gap:18px;justify-content:center;margin-top:12px}
-  footer .small-links a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,0.04);padding-bottom:2px}
+/* split: left animated purple half, right dark (animated left only) */
+html[data-theme="split"] .background .color{
+  background:
+    linear-gradient(90deg,
+      /* left animated area (we keep a subtle movement using background-position) */
+      rgba(124,58,237,0.94) 0% 50%,
+      rgba(6,10,20,0.08) 50% 100%
+    );
+  filter:contrast(1.06) saturate(1.12);
+  mix-blend-mode:screen; opacity:0.98;
+  background-size:200% 100%;
+  animation: bgShiftSplit 20s linear infinite;
+}
+@keyframes bgShiftSplit{0%{background-position:0% 50%}50%{background-position:50% 50%}100%{background-position:0% 50%}}
 
-  code{background:rgba(255,255,255,0.02);padding:4px 6px;border-radius:6px;font-size:12px}
-  img, iframe, video, embed, object{max-width:100% !important;height:auto !important;display:block;box-sizing:border-box}
+/* halloween */
+html[data-theme="halloween"] .background .color{
+  background:
+    radial-gradient(40% 40% at 15% 30%, rgba(255,138,0,0.36), transparent 18%),
+    radial-gradient(40% 40% at 88% 70%, rgba(255,77,0,0.28), transparent 20%),
+    linear-gradient(100deg,var(--accent-start),var(--accent-mid),var(--accent-end));
+  filter:contrast(1.06) saturate(1.26) hue-rotate(6deg);
+}
 
-  /* reduce animations if user prefers */
-  @media (prefers-reduced-motion: reduce){
-    .background .color, .background .blob, .top-loader .bar::after { animation: none !important; }
-  }
+/* winter: icy animated canvas */
+html[data-theme="winter"] .background .color{
+  background:
+    radial-gradient(40% 40% at 10% 20%, rgba(190,238,255,0.14), transparent 20%),
+    radial-gradient(30% 30% at 80% 75%, rgba(130,212,255,0.10), transparent 22%),
+    linear-gradient(110deg,var(--accent-start),var(--accent-mid),var(--accent-end));
+  filter:contrast(1.06) saturate(1.08) brightness(1.02);
+}
+
+/* blobs (small, performant) */
+.background .blob{position:absolute;border-radius:50%;filter:blur(48px);opacity:0.52;mix-blend-mode:screen;pointer-events:none;left:50%;transform:translateX(-50%);will-change:transform}
+.background .blob.a{width:820px;height:820px;top:-22%;transform:translateX(-34%);background:radial-gradient(circle at 30% 30%, rgba(59,130,246,0.92), rgba(59,130,246,0.5) 36%, transparent 68%)}
+.background .blob.b{width:700px;height:700px;bottom:-18%;transform:translateX(36%);background:radial-gradient(circle at 70% 70%, rgba(124,58,237,0.92), rgba(124,58,237,0.48) 36%, transparent 68%);opacity:0.54}
+html[data-theme="purple"] .background .blob{opacity:0.72;filter:blur(56px)}
+html[data-theme="halloween"] .background .blob.a{background:radial-gradient(circle at 30% 30%, rgba(255,138,0,0.92), rgba(255,138,0,0.48) 36%, transparent 68%)}
+html[data-theme="halloween"] .background .blob.b{background:radial-gradient(circle at 70% 70%, rgba(255,77,0,0.92), rgba(255,77,0,0.44) 36%, transparent 68%);opacity:0.6}
+
+/* -------------------------
+   LAYOUT / CARDS / UI
+   ------------------------- */
+.viewport-frame{position:fixed;left:50%;top:20px;transform:translateX(-50%);width:calc(min(var(--content-max-width),100vw-40px));height:calc(100vh-40px);border-radius:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.01), 0 20px 50px rgba(2,6,23,0.6);z-index:-1;pointer-events:none;overflow:hidden}
+@media (max-width:860px){ .viewport-frame{display:none} }
+
+.wrap{max-width:var(--content-max-width);margin:56px auto;padding:28px;position:relative;z-index:2}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;gap:14px;align-items:center}
+.logo{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);font-weight:800;color:white;font-size:20px;box-shadow:0 6px 22px rgba(2,6,23,0.6)}
+.controls{display:flex;gap:10px;align-items:center}
+
+/* buttons */
+.btn{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));color:#eaf3ff;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 18px rgba(2,6,23,0.5);transform:translateZ(0);transition:transform .18s ease}
+.btn:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(3,7,23,0.5)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+.btn.full{display:block;width:100%;text-align:center;padding:14px 16px;border-radius:12px;box-sizing:border-box}
+
+/* grid */
+.grid{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:22px;align-items:start}
+@media (max-width:860px){ .grid{grid-template-columns:1fr} .wrap{padding:18px} .logo{width:60px;height:60px} }
+
+/* card (no heavy backdrop-filter) */
+.card{background: rgba(255,255,255,0.03);border-radius:var(--radius);padding:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:var(--shadow-strong);transition:transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease;transform-origin:top center;will-change:transform;contain:paint}
+.card:hover{transform:translateY(-8px);box-shadow:0 28px 80px rgba(2,6,23,0.78);border-color:rgba(255,255,255,0.06)}
+
+/* progress list */
+#progress-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+.prog-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02);transition:transform .18s ease}
+.prog-item:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(2,6,23,0.55)}
+.tag{font-size:12px;padding:6px 9px;border-radius:999px;color:white;font-weight:700}
+.tag.done{background:linear-gradient(90deg,var(--accent-start),var(--accent-end))}
+.tag.inprogress{background:linear-gradient(90deg,var(--inprog-start),var(--inprog-end))}
+.tag.todo{background:linear-gradient(90deg,var(--todo-start),var(--todo-end))}
+
+/* widget responsiveness: use flexible sizing (see explanation below) */
+.widget-wrap{display:flex;justify-content:center}
+.discord-widget{width:100%;max-width:360px;height:auto;border-radius:12px;overflow:hidden;border:0;box-shadow:0 20px 50px rgba(2,6,23,0.45);display:block;box-sizing:border-box}
+.discord-widget iframe{width:100%;height: clamp(340px, 50vh, 640px);display:block;border:0;box-sizing:border-box}
+
+/* footer & small-links */
+footer{text-align:center;margin-top:22px;color:var(--muted);font-size:13px;display:block;padding-top:24px}
+footer .small-links{display:flex;gap:18px;justify-content:center;margin-top:12px}
+footer .small-links a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,0.04);padding-bottom:2px}
+
+/* reveal animation */
+.reveal{opacity:0;transform:translateY(10px) scale(.997);animation: revealIn .5s forwards;animation-delay:0.06s}
+.reveal.delay{animation-delay:0.12s}
+.reveal.long{animation-duration:.72s}
+@keyframes revealIn{to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .background .color, .background .blob, .top-loader .bar::after { animation: none !important; }
+}
+
+/* -------------------------
+   WINTER SNOW (only visible in data-theme="winter")
+   lightweight CSS snow with optional extra JS flakes
+   ------------------------- */
+.snow-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden}
+.snowflake{
+  position:fixed;top:-10vh;left:0;width:10px;height:10px;background:transparent;color:var(--muted);
+  font-size:16px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+  animation: fall linear infinite;
+  will-change: transform, opacity;
+  opacity:0.95;
+}
+@keyframes fall{
+  0%{ transform: translateY(-10vh) translateX(0) rotate(0deg); opacity:0 }
+  5%{ opacity:1 }
+  100%{ transform: translateY(120vh) translateX(60vw) rotate(360deg); opacity:1 }
+}
+/* only show initial snow container when winter theme */
+html:not([data-theme="winter"]) .snow-wrap { display:none; }
+
+/* smaller devices: fewer/milder flakes for perf */
+@media (max-width:640px){
+  .snowflake{font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -193,6 +274,9 @@
     <div class="blob a" aria-hidden="true"></div>
     <div class="blob b" aria-hidden="true"></div>
   </div>
+
+  <!-- snow area (only used by winter theme; JS adds flakes when winter) -->
+  <div class="snow-wrap" id="snowWrap" aria-hidden="true"></div>
 
   <div class="viewport-frame" aria-hidden="true"></div>
 
@@ -244,15 +328,14 @@
               </div>
               <div class="tag todo">To do</div>
             </li>
-            
+
             <li class="prog-item">
               <div>
                 <div style="font-weight:700">2025-10-05 — Add a wiki</div>
-                <div class="muted" style="margin-top:6px">Widget embedded and styled</div>
+                <div class="muted" style="margin-top:6px">Documentation & guides</div>
               </div>
               <div class="tag todo">To do</div>
             </li>
-                
           </ul>
         </div>
       </div>
@@ -263,7 +346,7 @@
           <p class="muted">Live server widget (dark). If it appears blank, enable Server Widget in your Discord server settings.</p>
 
           <div class="widget-wrap" style="margin-top:12px">
-            <div class="discord-widget">
+            <div class="discord-widget" id="discordWrap">
               <iframe id="discordWidget" src="https://discord.com/widget?id=1432386695785091227&theme=dark" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" allow="clipboard-write"></iframe>
             </div>
           </div>
@@ -277,7 +360,7 @@
 
         <div class="card" style="margin-top:14px">
           <h4 style="margin-top:0">How to use</h4>
-          <p class="muted">Basically this website exists so you can view my progress, my recent projects or just view what I'm doing. Maybe your here because your bored, or you don't have something better to do. But if you like the diea from this site you can take a look at the license section and maybe build your own too. I hope you guys have a nice day. </p>
+          <p class="muted">This website showcases my Discord, progress, and small projects. Change theme by editing the top-of-file <code>data-theme</code> attribute and commit to GitHub. Use the About and License pages for more info.</p>
         </div>
       </aside>
     </section>
@@ -292,7 +375,7 @@
   </div>
 
 <script>
-/* Loader simulation */
+/* ===== loader simulation (unchanged) ===== */
 (function(){
   const bar = document.getElementById('loaderBar');
   let progress = 0;
@@ -317,7 +400,7 @@
   });
 })();
 
-/* Promote blobs to a GPU layer for smoother animation */
+/* promote blobs to layer for performance */
 (function(){
   document.querySelectorAll('.background .blob').forEach(b=>{
     b.style.transform = (b.style.transform || '') + ' translateZ(0)';
@@ -325,15 +408,40 @@
   });
 })();
 
-/* Insert BG debug helper only when theme === 'split' */
-/* i dleted the debug pannel
-      
+/* Winter: generate a few animated snowflakes for desktop when winter theme is active */
+(function(){
+  const theme = document.documentElement.getAttribute('data-theme');
+  if (theme !== 'winter') return; // only run when winter
+  const wrap = document.getElementById('snowWrap');
+  if (!wrap) return;
+  // create a modest number of flakes (desktop: 16, mobile: 6)
+  const isSmall = window.matchMedia('(max-width:640px)').matches;
+  const flakes = isSmall ? 6 : 16;
+  const chars = ['❅','❆','✻'];
+  for (let i=0;i<flakes;i++){
+    const el = document.createElement('div');
+    el.className = 'snowflake';
+    // randomize start position, speed and size
+    const left = Math.random()*100; // vw
+    const delay = Math.random()*-20;
+    const dur = 8 + Math.random()*12; // 8s..20s
+    const size = 12 + Math.floor(Math.random()*18); // px font-size
+    el.style.left = left + 'vw';
+    el.style.fontSize = size + 'px';
+    el.style.animationDuration = (dur) + 's';
+    el.style.animationDelay = (delay) + 's';
+    el.textContent = chars[Math.floor(Math.random()*chars.length)];
+    // subtle horizontal drift via CSS transform in animation; already handled in keyframe
+    wrap.appendChild(el);
+  }
+})();
 
-/* Helpful comment for you:
-   - To change theme: edit the very first line of this file and set data-theme on <html>
-     e.g. <html lang="en" data-theme="halloween"> then commit on GitHub.
-   - Possible values: dark, purple, split, halloween
+/* small developer note:
+   - to change theme edit the top <html ... data-theme="..."> and commit.
+   - available themes: dark, purple, purple-light, split, halloween, winter
 */
+
+/* OPTIONAL: if you want snow but prefer CSS-only, remove the JS and add static <div class="snowflake"> elements inside .snow-wrap */
 </script>
 </body>
 </html>
