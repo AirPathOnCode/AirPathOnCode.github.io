@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" data-theme="purple"><!-- optional: set data-theme to match your site -->
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>404 — Page not found</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-a:#041026;
+    --accent-start:#60a5fa;
+    --accent-mid:#9f7aea;
+    --accent-end:#7c3aed;
+    --muted:rgba(255,255,255,0.82);
+    --container-w:980px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0;width:100vw;overflow-x:hidden;background:var(--bg-a);font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:var(--muted);-webkit-font-smoothing:antialiased}
+  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px}
+  .card{
+    width:100%;max-width:var(--container-w);border-radius:18px;padding:34px;display:flex;gap:28px;align-items:center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 40px 100px rgba(2,6,23,0.65);
+    transform-origin:center;
+  }
+
+  /* left: animated cat — make responsive */
+  .cat-wrap{flex:0 0 420px;display:flex;align-items:center;justify-content:center}
+  @media (max-width:880px){ .card{flex-direction:column;gap:18px;padding:22px} .cat-wrap{flex:0 0 auto;width:68%} }
+
+  /* right: message */
+  .msg{flex:1;min-width:220px}
+  h1{margin:0;font-size:clamp(26px,3vw,40px);letter-spacing:-0.6px}
+  p.lead{margin-top:10px;color:var(--muted);font-size:clamp(14px,1.1vw,16px)}
+  .btn{
+    display:inline-flex;gap:10px;align-items:center;padding:12px 16px;border-radius:12px;margin-top:18px;
+    background:linear-gradient(90deg,var(--accent-start),var(--accent-end));
+    color:white;text-decoration:none;font-weight:700;border:0;box-shadow:0 12px 36px rgba(2,6,23,0.6);
+  }
+  .meta{margin-top:12px;color:rgba(255,255,255,0.62);font-size:13px}
+
+  /* animated gradient for cat (fills) */
+  .grad-anim-stop{animation: hueShift 6s linear infinite}
+  @keyframes hueShift{
+    0%{filter:hue-rotate(0deg) saturate(1)}
+    50%{filter:hue-rotate(-12deg) saturate(1.05)}
+    100%{filter:hue-rotate(0deg) saturate(1)}
+  }
+
+  /* cat bob + subtle tail wag */
+  .cat{
+    width:88%;
+    max-width:420px;
+    transform-origin:center bottom;
+    animation: bob 3.6s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%{transform:translateY(0) rotate(0.0deg)}
+    25%{transform:translateY(-6px) rotate(-0.2deg)}
+    50%{transform:translateY(0) rotate(0.0deg)}
+    75%{transform:translateY(-4px) rotate(0.2deg)}
+    100%{transform:translateY(0) rotate(0)}
+  }
+
+  /* tail wag controlled with CSS variable for ease */
+  .tail { transform-origin: 88% 40%; animation: tailwag 1.6s ease-in-out infinite; }
+  @keyframes tailwag{
+    0%{transform:rotate(0deg)}
+    25%{transform:rotate(12deg)}
+    50%{transform:rotate(0deg)}
+    75%{transform:rotate(-10deg)}
+    100%{transform:rotate(0deg)}
+  }
+
+  /* small note */
+  footer.note{text-align:center;margin-top:18px;color:rgba(255,255,255,0.44);font-size:13px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="errTitle">
+      <div class="cat-wrap" aria-hidden="true">
+        <!-- Inline SVG cat: fill uses gradient; gradient group has class grad-anim-stop to animate color subtly. Tail path has class "tail" for wag -->
+        <svg class="cat" viewBox="0 0 600 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated cat illustration">
+          <defs>
+            <linearGradient id="g1" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="50%" stop-color="#9f7aea" />
+              <stop offset="100%" stop-color="#7c3aed" />
+            </linearGradient>
+            <!-- lighter highlight -->
+            <linearGradient id="g2" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.18)" />
+              <stop offset="100%" stop-color="rgba(255,255,255,0.02)" />
+            </linearGradient>
+            <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="8" result="b" />
+              <feBlend in="SourceGraphic" in2="b"/>
+            </filter>
+          </defs>
+
+          <!-- background soft glow -->
+          <ellipse cx="300" cy="420" rx="210" ry="36" fill="rgba(0,0,0,0.25)" />
+
+          <!-- cat group -->
+          <g class="grad-anim-stop" filter="url(#soft)">
+            <!-- body -->
+            <path d="M180 300 C120 260 110 180 170 160 C210 150 240 150 290 178 C340 150 410 150 450 172 C510 200 520 270 470 300 C430 325 220 340 180 300 Z"
+                  fill="url(#g1)" opacity="0.98"/>
+            <!-- belly highlight -->
+            <path d="M240 285 C260 270 320 270 360 285 C340 300 280 305 240 285 Z" fill="url(#g2)" opacity="0.6"/>
+
+            <!-- head -->
+            <path d="M200 190 C170 150 220 90 280 98 C320 102 360 130 378 170 C346 170 300 176 260 186 C235 192 215 198 200 190 Z" fill="url(#g1)"/>
+
+            <!-- left ear -->
+            <path d="M230 120 L205 84 L242 100 Z" fill="rgba(255,255,255,0.06)"/>
+            <!-- right ear -->
+            <path d="M320 106 L348 86 L330 120 Z" fill="rgba(255,255,255,0.06)"/>
+
+            <!-- eyes / nose playful -->
+            <ellipse cx="265" cy="170" rx="14" ry="10" fill="#0b1220" opacity="0.9"/>
+            <ellipse cx="312" cy="170" rx="14" ry="10" fill="#0b1220" opacity="0.9"/>
+            <path d="M289 188 q6 8 12 0" stroke="#0b1220" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+            <!-- whiskers -->
+            <path d="M220 180 h-48" stroke="rgba(255,255,255,0.14)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M220 192 h-52" stroke="rgba(255,255,255,0.08)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M370 180 h48" stroke="rgba(255,255,255,0.14)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M370 192 h52" stroke="rgba(255,255,255,0.08)" stroke-width="2" stroke-linecap="round"/>
+
+            <!-- tail (separate path to wag) -->
+            <g transform="translate(440,260)">
+              <path class="tail" d="M0 0 C60 -8 84 -40 120 -54 C140 -64 170 -68 190 -54"
+                    stroke="url(#g1)" stroke-width="22" stroke-linecap="round" fill="none" stroke-linejoin="round" opacity="0.98"/>
+            </g>
+
+            <!-- small paw -->
+            <g transform="translate(200,310)">
+              <ellipse cx="0" cy="20" rx="18" ry="12" fill="url(#g1)"/>
+              <ellipse cx="25" cy="6" rx="8" ry="6" fill="url(#g2)"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="msg" id="msg">
+        <h1 id="errTitle">404 — Page not found</h1>
+        <p class="lead">Oops! The page you're looking for does not exist (or you typed a wrong address). But the cat is here to guide you back.</p>
+        <a class="btn" href="index.html">Return home</a>
+        <div class="meta">If you think this is a mistake, check the URL or visit the <a href="https://github.com/AirPathOnCode" target="_blank" rel="noreferrer" style="color:inherit;text-decoration:underline">GitHub</a>.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="note" aria-hidden="true">Made with love • AirPathOnCode</footer>
+</body>
+</html>
