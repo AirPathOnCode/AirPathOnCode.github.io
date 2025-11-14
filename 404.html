@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="purple"><!-- fallback theme if no saved theme found -->
+<html lang="en" data-theme="purple"><!-- change data-theme if you want -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -12,7 +12,6 @@
     --muted:rgba(255,255,255,0.82);
     --card-w:1100px;
   }
-
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;padding:0;width:100vw;overflow-x:hidden;background:var(--bg-a);font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:var(--muted);-webkit-font-smoothing:antialiased}
 
@@ -24,48 +23,80 @@
     box-shadow: 0 40px 100px rgba(2,6,23,0.65);
   }
 
-  /* cat area (bitmap) */
   .cat-wrap{flex:0 0 420px;display:flex;align-items:center;justify-content:center}
   @media (max-width:1100px){ .card{padding:26px} .cat-wrap{flex:0 0 360px} }
   @media (max-width:820px){ .card{flex-direction:column;gap:18px;padding:22px} .cat-wrap{width:72%;flex:0 0 auto} }
 
-  .cat-img{
-    width:90%; max-width:460px; display:block;
-    transform-origin:center bottom;
-    animation: bob 3.6s ease-in-out infinite;
-    will-change: transform;
-  }
-  @keyframes bob{
-    0%{transform:translateY(0)}
-    25%{transform:translateY(-8px)}
-    50%{transform:translateY(0)}
-    75%{transform:translateY(-5px)}
-    100%{transform:translateY(0)}
-  }
+  /* inline SVG sized and animated */
+  .cat-svg{width:92%;max-width:460px;display:block;transform-origin:center bottom;animation:bob 3.6s ease-in-out infinite}
+  @keyframes bob{0%{transform:translateY(0)}25%{transform:translateY(-8px)}50%{transform:translateY(0)}75%{transform:translateY(-5px)}100%{transform:translateY(0)}}
 
   .msg{flex:1;min-width:220px}
   h1{margin:0;font-size:clamp(26px,4.2vw,40px);letter-spacing:-0.6px;color:color-mix(in srgb, white 92%, black 0%);}
   p.lead{margin-top:12px;color:var(--muted);font-size:clamp(13px,1.2vw,16px)}
-  .btn{
-    display:inline-flex;gap:10px;align-items:center;padding:12px 18px;border-radius:12px;margin-top:18px;
-    background:linear-gradient(90deg,var(--accent-start),var(--accent-end));
-    color:white;text-decoration:none;font-weight:800;border:0;box-shadow:0 12px 36px rgba(2,6,23,0.5);
-  }
-  .btn:active{transform:translateY(1px)}
+  .btn{display:inline-flex;gap:10px;align-items:center;padding:12px 18px;border-radius:12px;margin-top:18px;background:linear-gradient(90deg,var(--accent-start),var(--accent-end));color:white;text-decoration:none;font-weight:800;border:0;box-shadow:0 12px 36px rgba(2,6,23,0.5)}
   .meta{margin-top:12px;color:rgba(255,255,255,0.55);font-size:13px}
 
-  /* reduced motion respect */
-  @media (prefers-reduced-motion: reduce){
-    .cat-img{animation:none}
-  }
+  @media (prefers-reduced-motion: reduce){ .cat-svg{animation:none} }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="errTitle">
       <div class="cat-wrap" aria-hidden="true">
-        <!-- Embedded PNG (your provided cat image) -->
-        <img class="cat-img" alt="Cute cat" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAIAAACQ1qkWAAAACXBIWXMAAAsTAAALEwEAmpwYAAAgAElEQVR4nOydd5xcVf3//2T4y0qkIhSkqYhKpUQJSqRFAqKjY2tq3t2u7u6u7u7u7u7v7e7u7t7u7u7u7u7u7u7u7v+8mZs5nZ7M1nZl3nHnM3+4w3k+P8x7P7n3d3Nw8iUlEREREREREREREREREREREREREREREVm6Qz1wAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQKAzQ5y9gJ8c7gFYLRt9e8w2wAgIECBAgAABAgQIECBAgAABAgQIECBAgQIDAfiq2nVQAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQODdOoszWgAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQCAf4r2nVwAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQCAv4r2nVwAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQCAv4r2nVwAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQCAv4r2nVwAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQCAv4r2nVwAAQIECBAgQIAAAQIECBAgQIAAAQIECBAYC/7W7+3v3f4gQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQINBfLgA7YbTO5AgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAv4jATQgo5c6JQABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAk8A4wA/6w5AAECBAgQIECAAAECBAgQIECAAAECBAgQIEAgH+I5sQwq7kQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQkA8wQd8QHkQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQ0DsGkLwDAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQ0C8hQb4M9gQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQuBeQy7eQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQmA+Qz7mQ0AABAgQIECBAgAABAgQIECBAgAABAgQIECBAgACBfA8YwD/AwQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQmBvggQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQkC+AABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQmA8wAggQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQmBvggQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQkC+AAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQkA/AQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIEAgf4t7vB1QIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIEBg3wH4AQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAg8H8AAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECCQzgAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECCQD4AAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECCQD4AAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAYC/4B6kG2xX6wAAAAASUVORK5CYII=">
+        <!-- Inline vector cat — compact, scales well, theme-adaptive fill via CSS variables -->
+        <svg class="cat-svg" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cute cat">
+          <defs>
+            <linearGradient id="gA" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0" stop-color="var(--accent-start)"/>
+              <stop offset="0.55" stop-color="var(--accent-mid)"/>
+              <stop offset="1" stop-color="var(--accent-end)"/>
+            </linearGradient>
+            <linearGradient id="gB" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0" stop-color="rgba(255,255,255,0.18)"/>
+              <stop offset="1" stop-color="rgba(255,255,255,0.02)"/>
+            </linearGradient>
+            <filter id="fBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6" /></filter>
+          </defs>
+
+          <!-- soft shadow -->
+          <ellipse cx="300" cy="355" rx="155" ry="26" fill="rgba(0,0,0,0.25)"/>
+
+          <!-- tail behind: gentle curve -->
+          <path d="M480 250 C520 230 560 200 580 180" stroke="url(#gA)" stroke-width="26" stroke-linecap="round" fill="none" opacity="0.96"/>
+
+          <!-- body blob -->
+          <g filter="url(#fBlur)">
+            <ellipse cx="260" cy="250" rx="240" ry="120" fill="url(#gA)" opacity="0.98"/>
+          </g>
+
+          <!-- belly highlight -->
+          <path d="M160 270 C200 240 340 240 380 270 C350 300 230 310 160 270 Z" fill="url(#gB)" opacity="0.6"/>
+
+          <!-- head -->
+          <circle cx="240" cy="160" r="62" fill="url(#gA)"/>
+          <!-- ears -->
+          <path d="M200 120 L180 86 L222 104 Z" fill="rgba(255,255,255,0.06)"/>
+          <path d="M280 116 L310 86 L294 120 Z" fill="rgba(255,255,255,0.06)"/>
+
+          <!-- eyes -->
+          <ellipse cx="225" cy="160" rx="12" ry="16" fill="#0b1220"/>
+          <ellipse cx="260" cy="160" rx="12" ry="16" fill="#0b1220"/>
+          <!-- small shine -->
+          <circle cx="219" cy="155" r="3" fill="#fff" opacity="0.9"/>
+          <circle cx="254" cy="155" r="3" fill="#fff" opacity="0.9"/>
+
+          <!-- nose & mouth -->
+          <ellipse cx="242" cy="178" rx="8" ry="6" fill="#0b1220"/>
+          <path d="M235 188 q7 6 14 0" stroke="#0b1220" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+          <!-- whisker marks -->
+          <rect x="292" y="170" rx="6" ry="6" width="24" height="8" fill="rgba(255,255,255,0.06)" transform="rotate(-6 304 174)"/>
+          <rect x="180" y="170" rx="6" ry="6" width="24" height="8" fill="rgba(255,255,255,0.06)" transform="rotate(6 192 174)"/>
+
+          <!-- small paw -->
+          <ellipse cx="180" cy="305" rx="18" ry="12" fill="url(#gA)"/>
+        </svg>
       </div>
 
       <div class="msg" id="msg">
@@ -78,12 +109,7 @@
   </div>
 
 <script>
-/*
-  Theme-syncing logic (keeps accents matching your homepage theme):
-  - Tries localStorage.ap_theme first (if your homepage stored it).
-  - Falls back to this page's data-theme attribute.
-  - Applies accent colors to CSS variables so the button and accents match.
-*/
+/* theme-syncing: apply accent colors from stored theme or data-theme */
 (function(){
   const themeMap = {
     dark:   ['#3b82f6','#8b5cf6','#7c3aed'],
@@ -121,9 +147,7 @@
       c.style.border = '1px solid rgba(6,8,20,0.03)';
       c.style.boxShadow = '0 30px 80px rgba(6,8,20,0.06)';
     });
-    document.querySelectorAll('h1,p,a,.meta').forEach(n => {
-      n.style.color = 'rgba(6,8,20,0.94)';
-    });
+    document.querySelectorAll('h1,p,a,.meta').forEach(n => n.style.color = 'rgba(6,8,20,0.94)');
   } else {
     document.body.style.background = getComputedStyle(root).getPropertyValue('--bg-a') || '';
   }
