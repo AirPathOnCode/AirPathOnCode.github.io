@@ -1,1 +1,215 @@
+/* styles.css - Basic, accessible, responsive stylesheet */
 
+/* ========== Reset & box-sizing ========== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; padding: 0; }
+
+/* ========== Theme variables ========== */
+:root{
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #6b21a8;        /* primary color */
+  --accent-weak: #9b6df0;
+  --radius: 8px;
+  --max-width: 1100px;
+  --gutter: 1rem;
+  --nav-height: 64px;
+}
+
+/* ========== Base typography ========== */
+body{
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: var(--gutter);
+}
+
+/* Container */
+.container{
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* ========== Headings & utilities ========== */
+h1,h2,h3,h4{ color: var(--text); margin: 0 0 0.5rem 0; }
+p{ margin: 0 0 1rem 0; color: var(--muted); }
+
+/* Utility */
+.hidden { display:none !important; }
+.center { text-align:center; }
+
+/* ========== Links & buttons ========== */
+a { color: var(--accent); text-decoration: none; }
+a:visited { color: var(--accent); opacity: 0.95; }
+a:hover, a:focus { color: var(--accent-weak); outline: none; text-decoration: underline; }
+a:focus { box-shadow: 0 0 0 3px rgba(107,33,168,0.12); border-radius: 4px; }
+
+/* Button like link */
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: .55rem .9rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+.btn:focus { box-shadow: 0 0 0 4px rgba(107,33,168,0.12); }
+
+/* ========== Header & Navigation ========== */
+.site-header{
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, rgba(107,33,168,0.04), transparent);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(4px);
+}
+.site-header .container { display:flex; align-items:center; justify-content:space-between; gap: 1rem; }
+
+/* Logo */
+.site-logo { font-weight: 700; font-size: 1.05rem; color: var(--text); }
+
+/* Navigation list */
+.nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+.nav-list a {
+  display: inline-block;
+  padding: .45rem .65rem;
+  border-radius: 6px;
+  color: var(--text);
+}
+.nav-list a:hover, .nav-list a:focus {
+  background: rgba(107,33,168,0.06);
+  color: var(--accent);
+}
+
+/* Mobile menu toggle (visual only) */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* ========== Main layout ========== */
+main { padding: 1.5rem 0; }
+.hero {
+  padding: 2rem 0;
+  background: var(--surface);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+/* Grid system for content */
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+
+/* ========== Footer ========== */
+.site-footer {
+  padding: 1rem 0;
+  color: var(--muted);
+  font-size: .95rem;
+  text-align: center;
+}
+
+/* ========== Forms ========== */
+input, textarea, select, button {
+  font: inherit;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  margin-bottom: .75rem;
+}
+.input, .textarea {
+  padding: .6rem;
+  border-radius: 8px;
+  border: 1px solid #e6e9ef;
+  background: #fff;
+  color: var(--text);
+}
+.input:focus, .textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
+  border-color: var(--accent);
+}
+
+/* ========== Accessibility helpers ========== */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  background: #000;
+  color: #fff;
+  padding: .5rem;
+  z-index: 100;
+}
+
+/* ========== Responsive behavior ========== */
+@media (max-width: 900px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .nav-list { display: none; } /* hide full menu on small screens (replace with JS toggle if needed) */
+  .menu-toggle { display: inline-flex; align-items:center; gap:.5rem; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .site-header { padding: .5rem 0; }
+}
+
+/* ========== Small helpers for legacy browser support ==========
+   Avoid cutting-edge features that lack broad support. Use simple
+   Grid and Flexbox, variables are supported in modern browsers; if
+   you need IE11 support, remove variables and use static values.  */
