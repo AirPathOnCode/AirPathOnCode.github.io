@@ -1,1 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>C‑Wiki · Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <style>
+    :root {
+      --bg: #050718;
+      --bg-alt: #0b0f2a;
+      --accent: #7f5af0;
+      --accent-soft: #5d3fd3;
+      --accent-blue: #3c8dff;
+      --accent-orange: #ff9f43;
+      --text: #e5e9ff;
+      --muted: #a0a4c0;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: radial-gradient(circle at top, #101632 0%, #050718 55%, #020310 100%);
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.75rem;
+      background: linear-gradient(90deg, rgba(11, 15, 42, 0.95), rgba(5, 7, 24, 0.98));
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-title {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 1.25rem;
+      font-size: 0.9rem;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.25rem;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-blue));
+      transition: width 0.2s ease-out;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    .home-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 70vh;
+      justify-content: center;
+    }
+
+    .logo-image {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 1.75rem;
+    }
+
+    .home-title {
+      font-size: 2.2rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .home-subtitle {
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 2rem;
+    }
+
+    .search-box {
+      display: flex;
+      width: min(480px, 100%);
+      margin: 0 auto;
+      justify-content: center;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, rgba(127, 90, 240, 0.18), rgba(5, 7, 24, 0.9));
+      box-shadow:
+        0 18px 60px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 0.85rem 1.1rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-results {
+      margin-top: 1.25rem;
+      width: min(640px, 100%);
+      background: linear-gradient(135deg, rgba(11, 15, 42, 0.98), rgba(5, 7, 24, 0.98));
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.9);
+      padding: 0.75rem 1rem 0.9rem;
+      text-align: left;
+    }
+
+    .search-results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding-bottom: 0.35rem;
+    }
+
+    .search-results-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.2rem 0 0;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .search-results-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .search-results-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .search-results-list::-webkit-scrollbar-thumb {
+      background: rgba(127, 90, 240, 0.45);
+      border-radius: 999px;
+    }
+
+    .search-result-item {
+      padding: 0.55rem 0.35rem;
+      border-radius: 10px;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      column-gap: 0.5rem;
+      row-gap: 0.15rem;
+      align-items: flex-start;
+      transition: background 0.12s ease-out, transform 0.06s ease-out;
+    }
+
+    .search-result-item:hover {
+      background: radial-gradient(circle at left, rgba(127, 90, 240, 0.24), transparent 60%);
+      transform: translateY(-1px);
+    }
+
+    .search-result-main {
+      min-width: 0;
+    }
+
+    .search-result-title {
+      font-size: 0.93rem;
+      font-weight: 600;
+    }
+
+    .search-result-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .search-result-meta {
+      text-align: right;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.08rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: rgba(127, 90, 240, 0.18);
+      color: var(--text);
+      margin-left: 0.25rem;
+      border: 1px solid rgba(127, 90, 240, 0.35);
+    }
+
+    .article-widgets {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .article-widget {
+      background: linear-gradient(135deg, rgba(11, 15, 42, 0.96), rgba(5, 7, 24, 0.98));
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 1.25rem 1.1rem 1.2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .article-widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-widget-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .article-widget-count {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .article-widget-count span {
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    .article-widget-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.25rem 0 0;
+    }
+
+    .article-widget-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.12s ease-out, transform 0.06s ease-out;
+    }
+
+    .article-widget-item:hover {
+      background: radial-gradient(circle at left, rgba(127, 90, 240, 0.22), transparent 60%);
+      transform: translateY(-1px);
+    }
+
+    .article-widget-main {
+      min-width: 0;
+    }
+
+    .article-widget-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .article-widget-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-left: 0.5rem;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 720px) {
+      .home-title {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="home-hero">
+      <h1 class="home-title">Wiki</h1>
+      <p class="home-subtitle">
+        Welcome to the APdocs. If you need any help regarding our tools, generators, apis or packages you'll probably find your answers here.
+      </p>
+
+      <form class="search-box" onsubmit="return goToArticle(event)">
+        <input
+          class="search-input"
+          type="search"
+          placeholder="Search articles…"
+          aria-label="Search articles"
+          id="searchInput"
+        />
+      </form>
+
+      <div class="search-results" id="searchResults" hidden>
+        <div class="search-results-header">
+          <span id="resultsCount">Type to search</span>
+        </div>
+        <ul class="search-results-list" id="resultsList"></ul>
+      </div>
+    </section>
+
+    <section class="article-widgets" id="articleWidgets"></section>
+  </main>
+
+  <script>
+    const ARTICLES = [
+      {
+        slug: "getting-started",
+        title: "Getting started",
+        section: "Wiki",
+        category: "Intro",
+        tags: ["intro", "overview"],
+        description: "Quick introduction to CWiki and how to use this documentation."
+      },
+      {
+        slug: "installation",
+        title: "Installation",
+        section: "Wiki",
+        category: "Setup",
+        tags: ["setup", "packages"],
+        description: "How to install tools, generators and packages for your environment."
+      },
+      {
+        slug: "configuration",
+        title: "Configuration",
+        section: "Wiki",
+        category: "Settings",
+        tags: ["config", "settings"],
+        description: "Configure CWiki tools, adjust settings and customize behaviour."
+      },
+      {
+        slug: "faq",
+        title: "FAQ",
+        section: "Wiki",
+        category: "Help",
+        tags: ["questions"],
+        description: "Frequently asked questions and troubleshooting tips."
+      },
+      {
+        slug: "templates",
+        title: "Templates Usage",
+        section: "Basics",
+        category: "Help",
+        tags: ["questions"],
+        description: "Learn how to use the article templates wich we provide."
+      },
+      {
+        slug: "wiki_article_generation",
+        title: "Generate Wiki Articles",
+        section: "Wiki",
+        category: "Meta",
+        tags: ["wiki", "how-to"],
+        description: "Learn how to use this wiki and generate new articles."
+      },
+      {
+        slug: "html_markdown",
+        title: "HTML Markdown",
+        section: "Basics",
+        category: "Meta",
+        tags: ["html", "how-to"],
+        description: "Learn basic html markdown for your articles."
+      },
+      {
+        slug: "news_article_generation",
+        title: "Creating News Articles",
+        section: "Guides",
+        category: "Meta",
+        tags: ["news", "how-to"],
+        description: "Learn how to use our templates and get into publishing by yourself"
+      },
+      {
+        slug: "wiki_intro",
+        title: "Wiki Intro",
+        section: "Wiki",
+        category: "Meta",
+        tags: ["wiki", "how-to"],
+        description: "The introducion to this wikis and its way of working"
+      }
+    ];
+
+    function slugify(text) {
+      return text
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function filterArticles(query) {
+      const q = query.trim().toLowerCase();
+      if (!q) return [];
+      return ARTICLES.filter(a => {
+        return (
+          a.title.toLowerCase().includes(q) ||
+          (a.description && a.description.toLowerCase().includes(q)) ||
+          (a.tags || []).some(t => t.toLowerCase().includes(q))
+        );
+      });
+    }
+
+    function renderResults(query) {
+      const panel = document.getElementById("searchResults");
+      const list = document.getElementById("resultsList");
+      const countEl = document.getElementById("resultsCount");
+
+      const results = filterArticles(query);
+      if (!query.trim()) {
+        panel.hidden = true;
+        list.innerHTML = "";
+        countEl.textContent = "Type to search";
+        return;
+      }
+
+      panel.hidden = false;
+      countEl.textContent = results.length === 1 ? "1 result" : results.length + " results";
+
+      if (!results.length) {
+        list.innerHTML = `
+          <li class="search-result-item">
+            <div class="search-result-main">
+              <div class="search-result-title">No results</div>
+              <div class="search-result-desc">
+                Try different keywords or browse from the structure page.
+              </div>
+            </div>
+            <div class="search-result-meta"></div>
+          </li>
+        `;
+        return;
+      }
+
+      list.innerHTML = results
+        .map(r => {
+          const tagsHtml = (r.tags || [])
+            .map(tag => `<span class="tag-pill">${tag}</span>`)
+            .join("");
+          return `
+            <li class="search-result-item" data-slug="${r.slug}">
+              <div class="search-result-main">
+                <div class="search-result-title">${r.title}</div>
+                <div class="search-result-desc">${r.description || ""}</div>
+              </div>
+              <div class="search-result-meta">
+                <div>${r.category || ""}</div>
+                <div>${tagsHtml}</div>
+              </div>
+            </li>
+          `;
+        })
+        .join("");
+
+      list.querySelectorAll(".search-result-item").forEach(item => {
+        const slug = item.getAttribute("data-slug");
+        if (!slug) return;
+        item.addEventListener("click", () => {
+          window.location.href = "article.html?slug=" + encodeURIComponent(slug);
+        });
+      });
+    }
+
+    function goToArticle(event) {
+      event.preventDefault();
+      const input = document.getElementById("searchInput");
+      const query = (input.value || "").trim();
+      if (!query) return false;
+
+      const qSlug = slugify(query);
+      let match = ARTICLES.find(a => a.slug === qSlug);
+      if (!match) {
+        const lower = query.toLowerCase();
+        match = ARTICLES.find(a => a.title.toLowerCase() === lower);
+      }
+
+      if (match) {
+        window.location.href = "article.html?slug=" + encodeURIComponent(match.slug);
+      } else {
+        renderResults(query);
+      }
+      return false;
+    }
+
+    function buildWidgets() {
+      const container = document.getElementById("articleWidgets");
+      if (!container) return;
+
+      const bySection = {};
+      ARTICLES.forEach(a => {
+        const section = a.section || "Other";
+        if (!bySection[section]) bySection[section] = [];
+        bySection[section].push(a);
+      });
+
+      const sectionNames = Object.keys(bySection).sort((a, b) => {
+        if (a === "Basics") return -1;
+        if (b === "Basics") return 1;
+        return a.localeCompare(b);
+      });
+
+      container.innerHTML = sectionNames
+        .map(section => {
+          const items = bySection[section].sort((a, b) =>
+            a.title.localeCompare(b.title)
+          );
+          const listHtml = items
+            .map(a => `
+              <li class="article-widget-item" data-slug="${a.slug}">
+                <div class="article-widget-main">
+                  <div class="article-widget-name">${a.title}</div>
+                  <div class="article-widget-meta">${a.category || ""}</div>
+                </div>
+              </li>
+            `)
+            .join("");
+          return `
+            <div class="article-widget">
+              <div class="article-widget-header">
+                <div class="article-widget-title">${section}</div>
+                <div class="article-widget-count">
+                  <span>${items.length}</span> articles
+                </div>
+              </div>
+              <ul class="article-widget-list">
+                ${listHtml}
+              </ul>
+            </div>
+          `;
+        })
+        .join("");
+
+      container.querySelectorAll(".article-widget-item").forEach(item => {
+        const slug = item.getAttribute("data-slug");
+        if (!slug) return;
+        item.addEventListener("click", () => {
+          window.location.href = "article.html?slug=" + encodeURIComponent(slug);
+        });
+      });
+    }
+
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", (e) => {
+      renderResults(e.target.value || "");
+    });
+
+    buildWidgets();
+  </script>
+</body>
+</html>
