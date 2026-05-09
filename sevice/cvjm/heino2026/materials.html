@@ -1,1 +1,185 @@
-hi
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Materialien</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0f1724;
+      --panel:#0b1220;
+      --muted:#9aa4b2;
+      --accent:#60a5fa;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --maxw:960px;
+      --gap:18px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        linear-gradient(180deg, rgba(96,165,250,0.04), transparent 40%),
+        radial-gradient(600px 400px at 10% 10%, rgba(96,165,250,0.03), transparent 10%),
+        var(--bg);
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+      gap:var(--gap);
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--maxw);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:calc(var(--radius) + 4px);
+      padding:26px;
+      box-shadow: 0 6px 30px rgba(4,8,20,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+    .title{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .logo{
+      width:46px;height:46px;border-radius:10px;
+      background:linear-gradient(135deg,var(--accent),#7dd3fc);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#05233b;
+      box-shadow: 0 4px 18px rgba(96,165,250,0.12);
+      flex:0 0 46px;
+    }
+    h1{font-size:18px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.012), transparent);
+      border-radius:12px;
+      padding:14px;
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    /* Table styles */
+    .table-wrap{overflow:auto;border-radius:10px}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:560px;
+      font-size:14px;
+    }
+    thead th{
+      text-align:left;
+      padding:12px 16px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:13px;
+      letter-spacing:0.01em;
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      position:sticky;
+      top:0;
+      backdrop-filter: blur(6px);
+    }
+    tbody td{
+      padding:14px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.003), transparent);
+      border-top:1px solid rgba(255,255,255,0.02);
+      vertical-align:middle;
+      color:#dbe9fb;
+    }
+    tbody tr:hover td{
+      background: linear-gradient(90deg, rgba(96,165,250,0.03), rgba(125,211,252,0.02));
+    }
+
+    .box-pill{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      color:#eaf6ff;
+      font-weight:600;
+      font-size:13px;
+    }
+    .contains{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    /* small screens */
+    @media (max-width:640px){
+      body{padding:18px}
+      .container{padding:16px}
+      .logo{width:40px;height:40px}
+      thead th{padding:10px}
+      tbody td{padding:10px}
+      table{min-width:420px}
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main">
+    <header>
+      <div class="title">
+        <div class="logo"></div>
+        <div>
+          <h1>Materials</h1>
+          <p class="lead">Material Sortierung</p>
+        </div>
+      </div>
+      <div style="color:var(--muted);font-size:13px">Updated: May 9, 2026</div>
+    </header>
+
+    <section class="card">
+      <div class="table-wrap">
+        <table aria-label="Box and Contains table">
+          <thead>
+            <tr>
+              <th>Box</th>
+              <th>Contains</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="box-pill">Box A</span></td>
+              <td class="contains">1xRed widgets,<br> 12 pieces, <br>fragile — handle with care</td>
+            </tr>
+            <tr>
+              <td><span class="box-pill">Box B</span></td>
+              <td class="contains">Blue gears, 30 pieces, steel</td>
+            </tr>
+            <tr>
+              <td><span class="box-pill">Box C</span></td>
+              <td class="contains">Assorted cables: USB-C, Lightning, HDMI (10 items)</td>
+            </tr>
+            <tr>
+              <td><span class="box-pill">Box D</span></td>
+              <td class="contains">Paper documents (confidential), sealed envelope</td>
+            </tr>
+            <tr>
+              <td><span class="box-pill">Box E</span></td>
+              <td class="contains">Sample kit: markers, tape, scissors</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
